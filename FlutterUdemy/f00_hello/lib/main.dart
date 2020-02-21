@@ -1,19 +1,21 @@
+import 'package:f00_hello/question.dart';
 import 'package:flutter/material.dart';
+import 'package:f00_hello/answer.dart';
 
 void main() => runApp(HelloApp());
 
 class HelloApp extends StatefulWidget {
   @override
-  createState() => HelloAppState();
+  createState() => _HelloAppState();
 }
 
-class HelloAppState extends State<HelloApp> {
+class _HelloAppState extends State<HelloApp> {
   var questions = ["Oblubeny chleb ?", "Oblubeny patkaň ?", "Fajne jedlo?"];
   var questionIdx = 0;
 
   void questionPressed() {
     setState(() {
-      if (questionIdx < questions.length-1) questionIdx++;
+      if (questionIdx < questions.length - 1) questionIdx++;
     });
   }
 
@@ -26,19 +28,10 @@ class HelloAppState extends State<HelloApp> {
         ),
         body: Column(
           children: <Widget>[
-            Text(questions[questionIdx]),
-            RaisedButton(
-              child: Text('Answer'),
-              onPressed: questionPressed,
-            ),
-            RaisedButton(
-              child: Text(''),
-              onPressed: questionPressed,
-            ),
-            RaisedButton(
-              child: Text(''),
-              onPressed: questionPressed,
-            ),
+            Question(questions[questionIdx]),
+            Answer(questionPressed),
+            Answer(questionPressed),
+            Answer(questionPressed)
           ],
         ),
       ),
