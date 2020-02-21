@@ -10,7 +10,21 @@ class HelloApp extends StatefulWidget {
 }
 
 class _HelloAppState extends State<HelloApp> {
-  var questions = ["Oblubeny chleb ?", "Oblubeny patkaň ?", "Fajne jedlo?"];
+  var questions = [
+    {
+      "questionText": "Aky je tvoj oblubeny chleb??",
+      'answers': ["Parmezan", "Herold", "Šmerdzaci"]
+    },
+    {
+      "questionText": "Aky je tvoj oblubeny patkaň??",
+      'answers': ["Jerry", "Tom", "Myšak zos kanala"]
+    },
+    {
+      "questionText": "Aky je tvoj oblubeny policajt??",
+      'answers': ["Policajna akademia 4", "h", "Šesnasť dvanástnikov"]
+    }
+  ];
+
   var questionIdx = 0;
 
   void questionPressed() {
@@ -28,10 +42,10 @@ class _HelloAppState extends State<HelloApp> {
         ),
         body: Column(
           children: <Widget>[
-            Question(questions[questionIdx]),
-            Answer(questionPressed),
-            Answer(questionPressed),
-            Answer(questionPressed)
+            Question(questions[questionIdx]['questionText']),
+            ...(questions[questionIdx]['answers'] as List<String>)
+                .map((q) => Answer(questionPressed, q))
+                .toList(),
           ],
         ),
       ),
