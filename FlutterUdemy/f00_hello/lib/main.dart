@@ -14,15 +14,15 @@ class HelloApp extends StatefulWidget {
 class _HelloAppState extends State<HelloApp> {
   final questions = [
     {
-      "questionText": "Aky je tvoj oblubeny chleb??",
+      "questionText": "Aky je tvoj oblubeny chleb???",
       'answers': ["Parmezan", "Herold", "Šmerdzaci"]
     },
     {
-      "questionText": "Aky je tvoj oblubeny patkaň??",
+      "questionText": "Aky je tvoj oblubeny patkaň???",
       'answers': ["Jerry", "Tom", "Myšak zos kanala"]
     },
     {
-      "questionText": "Aky je tvoj oblubeny policajt??",
+      "questionText": "Aky je tvoj oblubeny policajt???",
       'answers': ["Policajna akademia 4", "h", "Šesnasť dvanástnikov"]
     }
   ];
@@ -31,7 +31,10 @@ class _HelloAppState extends State<HelloApp> {
 
   void questionPressed() {
     setState(() {
-      if (questionIdx < questions.length - 1) questionIdx++;
+      if (questionIdx < questions.length - 1)
+        questionIdx++;
+      else
+        questionIdx = 0;
     });
   }
 
@@ -40,7 +43,7 @@ class _HelloAppState extends State<HelloApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Hello'),
+          title: Text('Zodpovedaj na otazky!!!'),
         ),
         body: Column(
           children: <Widget>[
