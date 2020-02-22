@@ -4,13 +4,15 @@ import 'package:f00_hello/answer.dart';
 
 void main() => runApp(HelloApp());
 
+/* ysoh hello
+there */
 class HelloApp extends StatefulWidget {
   @override
   createState() => _HelloAppState();
 }
 
 class _HelloAppState extends State<HelloApp> {
-  var questions = [
+  final questions = [
     {
       "questionText": "Aky je tvoj oblubeny chleb??",
       'answers': ["Parmezan", "Herold", "Šmerdzaci"]
