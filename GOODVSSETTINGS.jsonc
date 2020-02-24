@@ -1,63 +1,69 @@
 {
-  "editor.fontFamily": "Consolas",
-  "terminal.integrated.fontFamily": "Consolas",
-  "git.ignoreMissingGitWarning": true,
-  "javascript.format.semicolons": "remove",
-  "typescript.format.semicolons": "remove",
-  "prettier.semi": false,
-  "workbench.startupEditor": "newUntitledFile",
-  "prettier.packageManager": "yarn",
-  "vsicons.presets.hideFolders": true,
-  "workbench.iconTheme": "material-icon-theme",
-  "files.autoSave": "off",
-  "debug.console.fontFamily": "Consolas",
-  "editor.wordWrap": "on",
-  "sass.lint.enable": true,
-  "editor.minimap.enabled": false,
-  "editor.tabSize": 2,
-  "explorer.compactFolders": false,
-  "code-runner.runInTerminal": true,
-  "git.enableSmartCommit": true,
-  "git.confirmSync": false,
-  "git.autofetch": true,
-  "window.zoomLevel": 0,
+    "editor.fontFamily": "Consolas",
+    "terminal.integrated.fontFamily": "Consolas",
+    "git.ignoreMissingGitWarning": true,
+    "javascript.format.semicolons": "remove",
+    "typescript.format.semicolons": "remove",
+    "prettier.semi": false,
+    "workbench.startupEditor": "newUntitledFile",
+    "prettier.packageManager": "yarn",
+    "vsicons.presets.hideFolders": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "files.autoSave": "off",
+    "debug.console.fontFamily": "Consolas",
+    "editor.wordWrap": "on",
+    "sass.lint.enable": true,
+    "editor.minimap.enabled": false,
+    "editor.tabSize": 2,
+    "explorer.compactFolders": false,
+    "code-runner.runInTerminal": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "window.zoomLevel": 0,
 
-  "editor.acceptSuggestionOnCommitCharacter": false,
-  "editor.renderLineHighlight": "gutter",
-  "editor.renderIndentGuides": false,
-  "emmet.showExpandedAbbreviation": "never",
-  "color-manager.languages": [
-      "css",
-      "html",
-      "javascript",
-      "typescript"
-  ],
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.renderLineHighlight": "gutter",
+    "editor.renderIndentGuides": false,
+    "emmet.showExpandedAbbreviation": "never",
+    "color-manager.languages": [
+        "css",
+        "html",
+        "javascript",
+        "typescript"
+    ],
 
-  "[dart]": {
-      "editor.defaultFormatter": "Dart-Code.dart-code",
-      "editor.formatOnSave": true,
-  },
-  "dart.closingLabels": false,
-  
-  "bracket-pair-colorizer-2.colors": [
-      "#3debe2"
-  ],
-  "bracket-pair-colorizer-2.showHorizontalScopeLine": false,
-  "editor.matchBrackets": "never",
-  "editor.fontSize": 16,
+    // DARTU!
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.formatOnSave": true,
+    },
+    "dart.closingLabels": false,
 
-  "workbench.colorTheme": "City Lights",
-  "workbench.colorCustomizations": {
-      "editorWarning.foreground": "#5e5e5e",
-      "[City Lights]": {
-          // "editor.background": "#1c1d21"
-      }
-  },
+    // BRAKETS
+    "editor.matchBrackets": "never",
+    "bracket-pair-colorizer-2.showHorizontalScopeLine": false,
+    "bracket-pair-colorizer-2.colorMode": "Consecutive",
+    "bracket-pair-colorizer-2.colors": [
+        "#3eb4f4",
+    ],
 
-  "editor.tokenColorCustomizations": {
-      "[City Lights]": {
-          //"types": "#c0d319",
-          "comments": "#757d9b"
-      }
-  }
+
+    // SOME KOLORS!!!
+    "workbench.colorCustomizations": {
+        "editorWarning.foreground": "#5e5e5e",
+        "[City Lights]": {
+            // "editor.background": "#1c1d21"
+        }
+    },
+    "editor.tokenColorCustomizations": {
+        "[City Lights]": {
+            "types": "#f1c753",
+            "comments": "#757d9b"
+        }
+    },
+
+    // EDITORRRR
+    "editor.fontSize": 16,
+    "workbench.colorTheme": "City Lights"
 }
