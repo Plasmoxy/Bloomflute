@@ -1,6 +1,9 @@
-import 'package:f00_hello/answer.dart';
-import 'package:f00_hello/question.dart';
+import 'package:f00_hello/quiz.dart';
+import 'package:f00_hello/result.dart';
 import 'package:flutter/material.dart';
+
+Map<String, Object> _answer(String text, int score) =>
+    {'text': text, 'score': score};
 
 void main() => runApp(HelloApp());
 
@@ -15,26 +18,37 @@ class _HelloAppState extends State<HelloApp> {
   final questions = [
     {
       "questionText": "Aky je tvoj oblubeny chleb???",
-      'answers': ["Parmezan", "Herold", "Šmerdzaci"]
+      'answers': [
+        _answer("Parmezan", 10),
+        _answer("Herold", 17),
+        _answer("Šmerdzaci", 20)
+      ]
     },
     {
       "questionText": "Aky je tvoj oblubeny patkaň???",
-      'answers': ["Jerry", "Tom", "Myšak zos kanala"]
+      'answers': [
+        _answer("Jerry", 10),
+        _answer("Tom", 11),
+        _answer("Myšak zos kanala", 150)
+      ]
     },
     {
       "questionText": "Aky je tvoj oblubeny policajt???",
-      'answers': ["Policajna akademia 4", "h", "Šesnasť dvanástnikov"]
+      'answers': [
+        _answer("Policajna akademia 4", 12),
+        _answer("h", 20),
+        _answer("Šesnasť dvanástnikov", 10)
+      ]
     }
   ];
 
   var questionIdx = 0;
+  var totalScore = 0;
 
-  void questionPressed() {
+  void questionPressed(int score) {
     setState(() {
-      if (questionIdx < questions.length - 1)
-        questionIdx++;
-      else
-        questionIdx = 0;
+      totalScore += score;
+      if (questionIdx < questions.length) questionIdx++;
     });
   }
 
@@ -45,14 +59,13 @@ class _HelloAppState extends State<HelloApp> {
         appBar: AppBar(
           title: Text('Zodpovedaj na otazky!!!'),
         ),
-        body: Column(
-          children: <Widget>[
-            Question(questions[questionIdx]['questionText']),
-            ...(questions[questionIdx]['answers'] as List<String>)
-                .map((q) => Answer(questionPressed, q))
-                .toList(),
-          ],
-        ),
+        body: (questionIdx < questions.length)
+            ? Quiz(
+                questions: questions,
+                questionPressed: questionPressed,
+                questionIdx: questionIdx,
+              )
+            : Result(totalScore),
       ),
     );
   }
