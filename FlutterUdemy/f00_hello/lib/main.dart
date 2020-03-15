@@ -45,6 +45,13 @@ class _HelloAppState extends State<HelloApp> {
   var questionIdx = 0;
   var totalScore = 0;
 
+  void resetQuiz() {
+    setState(() {
+      questionIdx = 0; // rebuilds tree and displays questions again
+      totalScore = 0;
+    });
+  }
+
   void questionPressed(int score) {
     setState(() {
       totalScore += score;
@@ -60,12 +67,8 @@ class _HelloAppState extends State<HelloApp> {
           title: Text('Zodpovedaj na otazky!!!'),
         ),
         body: (questionIdx < questions.length)
-            ? Quiz(
-                questions: questions,
-                questionPressed: questionPressed,
-                questionIdx: questionIdx,
-              )
-            : Result(totalScore),
+            ? Quiz(questionPressed, questions, questionIdx)
+            : Result(totalScore, resetQuiz),
       ),
     );
   }
