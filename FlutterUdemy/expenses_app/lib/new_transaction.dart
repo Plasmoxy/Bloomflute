@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class NewTransaction extends StatelessWidget {
   final void Function(String, double) addTransaction;
+
   final titleController = TextEditingController();
   final amountController = TextEditingController();
 
