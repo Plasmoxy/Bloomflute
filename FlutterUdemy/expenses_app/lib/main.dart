@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
+// note: in StatelessWidget, the only limitation is that
+// you cannot setState()
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,6 +25,11 @@ class MyHomePage extends StatelessWidget {
         id: 'car', title: 'New car', amount: 69.99, date: DateTime.now()),
   ];
 
+  // String inputTitle = "";
+  // String inputAmount = "";
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +37,8 @@ class MyHomePage extends StatelessWidget {
         title: Text('Flutter App'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
             width: double.infinity,
@@ -38,11 +47,39 @@ class MyHomePage extends StatelessWidget {
               child: Text('Chart'),
             ),
           ),
+          // input
+          Card(
+            elevation: 3,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Title'),
+                    controller: titleController,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Amount'),
+                    controller: amountController,
+                  ),
+                  FlatButton(
+                    child: Text('Add Transaction'),
+                    textColor: Colors.purple,
+                    onPressed: () {
+                      print(titleController.text);
+                      print(amountController.text);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
           // transactions
           Column(
             children: transactions.map((tx) {
               // transaction single
               return Card(
+                elevation: 3,
                 child: Row(
                   children: <Widget>[
                     // price
