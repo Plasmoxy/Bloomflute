@@ -34,51 +34,27 @@ class TransactionList extends StatelessWidget {
 
                 return Card(
                   elevation: 3,
-                  child: Row(
-                    children: <Widget>[
-                      // price
-                      Container(
-                        margin: EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 15,
-                        ),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 2,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        child: Text(
-                          '${tx.amount.toStringAsFixed(2)} €',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                  margin: EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 8,
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: FittedBox(
+                          child: Text('${tx.amount} €'),
                         ),
                       ),
-                      // title and date
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            tx.title,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            DateFormat('dd. MM. yyyy').format(tx.date),
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
+                    title: Text(
+                      tx.title,
+                      style: Theme.of(context).textTheme.title,
+                    ),
+                    subtitle: Text(
+                      DateFormat("dd. MM. yyyy").format(tx.date),
+                    ),
                   ),
                 );
               },
@@ -87,3 +63,57 @@ class TransactionList extends StatelessWidget {
     );
   }
 }
+
+/*
+CARD TYCH ITEMOV ALT ku ListTile
+
+Card(
+  elevation: 3,
+  child: Row(
+    children: <Widget>[
+      // price
+      Container(
+        margin: EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 15,
+        ),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            border: Border.all(
+              width: 2,
+              color: Theme.of(context).primaryColor,
+            ),
+            borderRadius:
+                BorderRadius.all(Radius.circular(10))),
+        child: Text(
+          '${tx.amount.toStringAsFixed(2)} €',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+      ),
+      // title and date
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            tx.title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            DateFormat('dd. MM. yyyy').format(tx.date),
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+);
+*/

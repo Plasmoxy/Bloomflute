@@ -26,7 +26,7 @@ class Chart extends StatelessWidget {
 
       // e = shortcut of the weekday
       return {'day': DateFormat.E().format(weekDay), 'amount': totalSum};
-    });
+    }).reversed.toList();
   }
 
   double get totalSpending =>
@@ -45,8 +45,8 @@ class Chart extends StatelessWidget {
             final percent = totalSpending != 0.0
                 ? (data['amount'] as double) / totalSpending
                 : 0.0;
-            return Flexible(
-              fit: FlexFit.tight,
+            return Expanded(
+              // fit: FlexFit.tight,
               child: ChartBar(data['day'], data['amount'], percent),
             );
           }).toList(),
