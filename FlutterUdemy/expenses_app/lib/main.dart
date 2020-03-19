@@ -1,3 +1,4 @@
+import 'package:expenses_app/chart.dart';
 import 'package:expenses_app/model/transaction.dart';
 import 'package:expenses_app/new_transaction.dart';
 import 'package:expenses_app/transaction_list.dart';
@@ -43,6 +44,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> transactions = [];
+  List<Transaction> get _recentTransactions {
+    return transactions
+        .where(
+          (tx) => tx.date.isAfter(
+            DateTime.now().subtract(
+              Duration(days: 7),
+            ),
+          ),
+        )
+        .toList();
+  }
 
   void addTransaction(String title, double amount) {
     final t = Transaction(
@@ -84,13 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('Chart'),
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(transactions),
           ],
         ),
