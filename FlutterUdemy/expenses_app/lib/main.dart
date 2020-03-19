@@ -16,11 +16,16 @@ class MyApp extends StatelessWidget {
       title: 'Expenses App',
       home: MyHomePage(),
       theme: ThemeData(
-        primarySwatch: Colors.teal,
+        primarySwatch: Colors.purple,
         accentColor: Colors.amber,
+        fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
               title: TextStyle(
                 fontFamily: 'Quicksand',
+                fontWeight: FontWeight.bold,
+              ),
+              button: TextStyle(
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
