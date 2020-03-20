@@ -1,8 +1,9 @@
-import 'package:expenses_app/chart.dart';
-import 'package:expenses_app/model/transaction.dart';
-import 'package:expenses_app/new_transaction.dart';
-import 'package:expenses_app/transaction_list.dart';
 import 'package:flutter/material.dart';
+
+import 'chart.dart';
+import 'model/transaction.dart';
+import 'new_transaction.dart';
+import 'transaction_list.dart';
 
 void main() => runApp(MyApp());
 
