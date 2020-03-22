@@ -15,6 +15,12 @@ class _NewTransactionState extends State<NewTransaction> {
   final amountController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
 
+  @override
+  void initState() {
+    super.initState();
+    print("NewTransaction initState");
+  }
+
   void submit() {
     final title = titleController.text;
     final amount = double.parse(amountController.text);
@@ -39,6 +45,13 @@ class _NewTransactionState extends State<NewTransaction> {
     setState(() {
       _selectedDate = date;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    amountController.dispose();
+    titleController.dispose();
   }
 
   @override
