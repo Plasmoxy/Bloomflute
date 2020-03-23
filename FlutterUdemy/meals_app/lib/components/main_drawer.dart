@@ -37,7 +37,7 @@ class MainDrawer extends StatelessWidget {
         ),
         SizedBox(height: 20),
         _listTile('Meals', Icons.restaurant),
-        _listTile('Settings', Icons.settings),
+        _listTile('Filters', Icons.settings),
       ]),
     );
   }
