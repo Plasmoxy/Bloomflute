@@ -30,9 +30,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Meals App',
       theme: theme,
-      home: CategoriesScreen(),
+      initialRoute: '/', // default je '/'
       routes: {
-        '/category-meals': (ctx) => CategoryMealsScreen(),
+        '/': (ctx) => CategoriesScreen(),
+        CategoryMealsScreen.route: (ctx) => CategoryMealsScreen(),
       },
     );
   }
