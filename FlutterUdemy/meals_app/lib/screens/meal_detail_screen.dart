@@ -59,7 +59,7 @@ class MealDetailScreen extends StatelessWidget {
           )),
           _buildSectionTitle(context, "Steps"),
           _buildDisplayContainer(ListView.builder(
-            itemCount: meal.ingredients.length,
+            itemCount: meal.steps.length,
             itemBuilder: (ctx, index) => Column(
               children: <Widget>[
                 ListTile(
