@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/components/meal_item.dart';
 import 'model/mockdata.dart';
 
 class CategoryMealsScreen extends StatelessWidget {
@@ -25,7 +26,7 @@ class CategoryMealsScreen extends StatelessWidget {
       appBar: AppBar(title: Text(categoryTitle)),
       body: ListView.builder(
         itemBuilder: (ctx, idx) {
-          return Text(filteredMeals[idx].title);
+          return MealItem(filteredMeals[idx]);
         },
         itemCount: filteredMeals.length,
       ),
