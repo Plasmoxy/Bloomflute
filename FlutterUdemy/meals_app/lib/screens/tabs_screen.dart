@@ -13,8 +13,6 @@ class _TabsScreenState extends State<TabsScreen> {
     FavoritesScreen(),
   ];
 
-  final _titles = ['Meal App', 'Favorites'];
-
   int _pageIdx = 0;
 
   void _selectPage(int index) {
@@ -27,9 +25,12 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_pageIdx]),
+        title: Text('Meal App'),
       ),
       body: _pages[_pageIdx],
+      drawer: Drawer(
+        child: Text('Drawer'),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         currentIndex: _pageIdx,
