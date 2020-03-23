@@ -33,7 +33,9 @@ class TransactionList extends StatelessWidget {
           )
         : ListView.builder(
             itemBuilder: (ctx, idx) => TransactionItem(
-              tx: transactions[idx],
+              // pass a new unique key to determine that each item is unique
+              key: ValueKey(transactions[idx].id),
+              transaction: transactions[idx],
               deleteTransaction: deleteTransaction,
             ),
             itemCount: transactions.length,

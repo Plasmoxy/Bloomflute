@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'model/transaction.dart';
 import 'package:intl/intl.dart';
 
+// key = flutter diffs by Widget type by default, if we want
+// to diff by something else (like an id), we have to
+// use keys
 class TransactionItem extends StatefulWidget {
   const TransactionItem({
     Key key,
-    @required this.tx,
+    @required this.transaction,
     @required this.deleteTransaction,
   }) : super(key: key);
 
-  final Transaction tx;
+  final Transaction transaction;
   final Function deleteTransaction;
 
   @override
@@ -44,21 +47,21 @@ class _TransactionItemState extends State<TransactionItem> {
           child: Padding(
             padding: EdgeInsets.all(6),
             child: FittedBox(
-              child: Text('${widget.tx.amount} €'),
+              child: Text('${widget.transaction.amount} €'),
             ),
           ),
         ),
         title: Text(
-          widget.tx.title,
+          widget.transaction.title,
           style: Theme.of(context).textTheme.title,
         ),
         subtitle: Text(
-          DateFormat("dd. MM. yyyy").format(widget.tx.date),
+          DateFormat("dd. MM. yyyy").format(widget.transaction.date),
         ),
         trailing: IconButton(
           icon: Icon(Icons.delete),
           color: Theme.of(context).errorColor,
-          onPressed: () => widget.deleteTransaction(widget.tx.id),
+          onPressed: () => widget.deleteTransaction(widget.transaction.id),
         ),
       ),
     );
