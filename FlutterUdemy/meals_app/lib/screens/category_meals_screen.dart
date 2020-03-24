@@ -6,6 +6,10 @@ import '../model/mockdata.dart';
 class CategoryMealsScreen extends StatefulWidget {
   static const route = '/category-meals';
 
+  final List<Meal> availableMeals;
+
+  CategoryMealsScreen(this.availableMeals);
+
   @override
   _CategoryMealsScreenState createState() => _CategoryMealsScreenState();
 }

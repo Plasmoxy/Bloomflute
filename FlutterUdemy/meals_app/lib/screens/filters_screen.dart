@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:meals_app/components/main_drawer.dart';
+import 'package:meals_app/main.dart';
 
 class FiltersScreen extends StatefulWidget {
   static const route = '/filters';
+
+  final Function(MealFiltersObj) saveFilters;
+
+  FiltersScreen(this.saveFilters);
 
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
@@ -28,6 +33,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Filters'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () => widget.saveFilters,
+          ),
+        ],
       ),
       drawer: MainDrawer(),
       body: Column(children: <Widget>[

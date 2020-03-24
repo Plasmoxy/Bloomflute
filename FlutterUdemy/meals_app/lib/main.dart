@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/model/meal.dart';
+import 'package:meals_app/model/mockdata.dart';
 import 'package:meals_app/screens/categories_screen.dart';
 import 'package:meals_app/screens/category_meals_screen.dart';
 import 'package:meals_app/screens/filters_screen.dart';
@@ -7,7 +9,29 @@ import 'package:meals_app/screens/tabs_screen.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MealFiltersObj {
+  bool isGlutenFree = false;
+  bool isLactoseFree = false;
+  bool isVegan = false;
+  bool isVegetarian = false;
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var filters = MealFiltersObj();
+  List<Meal> availableMeals = DUMMY_MEALS;
+
+  void saveFilters(MealFiltersObj newFilters) {
+    setState(() {
+      filters = newFilters;
+      availableMeals = DUMMY_MEALS;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ThemeData(
@@ -36,9 +60,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', // default je '/'
       routes: {
         '/': (ctx) => TabsScreen(),
-        CategoryMealsScreen.route: (ctx) => CategoryMealsScreen(),
+        CategoryMealsScreen.route: (ctx) => CategoryMealsScreen(availableMeals),
         MealDetailScreen.route: (ctx) => MealDetailScreen(),
-        FiltersScreen.route: (ctex) => FiltersScreen(),
+        FiltersScreen.route: (ctex) => FiltersScreen(saveFilters),
       },
       // onGenerateRoute: (settings) {
       //   print(settings.arguments);
