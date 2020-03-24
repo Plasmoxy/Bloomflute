@@ -10,10 +10,17 @@ import 'package:meals_app/screens/tabs_screen.dart';
 void main() => runApp(MyApp());
 
 class MealFiltersObj {
-  bool isGlutenFree = false;
-  bool isLactoseFree = false;
-  bool isVegan = false;
-  bool isVegetarian = false;
+  final bool isGlutenFree;
+  final bool isLactoseFree;
+  final bool isVegan;
+  final bool isVegetarian;
+
+  MealFiltersObj({
+    this.isGlutenFree = false,
+    this.isLactoseFree = false,
+    this.isVegetarian = false,
+    this.isVegan = false,
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -28,7 +35,13 @@ class _MyAppState extends State<MyApp> {
   void saveFilters(MealFiltersObj newFilters) {
     setState(() {
       filters = newFilters;
-      availableMeals = DUMMY_MEALS;
+      availableMeals = DUMMY_MEALS.where((x) {
+        if (filters.isGlutenFree && !x.isGlutenFree) return false;
+        if (filters.isLactoseFree && !x.isLactoseFree) return false;
+        if (filters.isVegan && !x.isVegan) return false;
+        if (filters.isVegetarian && !x.isVegetarian) return false;
+        return true;
+      }).toList();
     });
   }
 
@@ -62,7 +75,7 @@ class _MyAppState extends State<MyApp> {
         '/': (ctx) => TabsScreen(),
         CategoryMealsScreen.route: (ctx) => CategoryMealsScreen(availableMeals),
         MealDetailScreen.route: (ctx) => MealDetailScreen(),
-        FiltersScreen.route: (ctex) => FiltersScreen(saveFilters),
+        FiltersScreen.route: (ctex) => FiltersScreen(filters, saveFilters),
       },
       // onGenerateRoute: (settings) {
       //   print(settings.arguments);

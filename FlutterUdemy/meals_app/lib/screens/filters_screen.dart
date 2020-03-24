@@ -6,8 +6,9 @@ class FiltersScreen extends StatefulWidget {
   static const route = '/filters';
 
   final Function(MealFiltersObj) saveFilters;
+  final MealFiltersObj filters;
 
-  FiltersScreen(this.saveFilters);
+  FiltersScreen(this.filters, this.saveFilters);
 
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
@@ -18,6 +19,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
   bool _vegetarian = false;
   bool _vegan = false;
   bool _lactoseFree = false;
+
+  @override
+  initState() {
+    super.initState();
+    _glutenFree = widget.filters.isGlutenFree;
+    _vegetarian = widget.filters.isVegetarian;
+    _vegan = widget.filters.isVegan;
+    _lactoseFree = widget.filters.isLactoseFree;
+  }
 
   Widget _switchListTile(String title, String subtitle, bool value, Function(bool) update) {
     return SwitchListTile(
@@ -36,7 +46,16 @@ class _FiltersScreenState extends State<FiltersScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () => widget.saveFilters,
+            onPressed: () {
+              widget.saveFilters(
+                MealFiltersObj(
+                  isGlutenFree: _glutenFree,
+                  isLactoseFree: _lactoseFree,
+                  isVegan: _vegan,
+                  isVegetarian: _vegetarian,
+                ),
+              );
+            },
           ),
         ],
       ),
