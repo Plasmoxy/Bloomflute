@@ -4,9 +4,8 @@ import 'package:meals_app/model/meal.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
-  final void Function(String id) removeItem;
 
-  MealItem(this.meal, this.removeItem);
+  MealItem(this.meal);
 
   void selected(BuildContext context) async {
     final result = await Navigator.of(context).pushNamed(
@@ -14,7 +13,7 @@ class MealItem extends StatelessWidget {
       arguments: meal,
     );
     if (result != null) {
-      removeItem(result);
+      // removeItem(result);
     }
   }
 
