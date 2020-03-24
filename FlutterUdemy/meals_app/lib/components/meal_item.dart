@@ -8,7 +8,7 @@ class MealItem extends StatelessWidget {
 
   MealItem(this.meal, this.removeItem);
 
-  void selectMeal(BuildContext context) async {
+  void selected(BuildContext context) async {
     final result = await Navigator.of(context).pushNamed(
       MealDetailScreen.route,
       arguments: meal,
@@ -47,7 +47,7 @@ class MealItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => selectMeal(context),
+      onTap: () => selected(context),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
