@@ -1,34 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:meals_app/components/meal_item.dart';
+import 'package:meals_app/model/meal.dart';
 import '../model/mockdata.dart';
 
-class CategoryMealsScreen extends StatelessWidget {
+class CategoryMealsScreen extends StatefulWidget {
   static const route = '/category-meals';
-  // final String categoryId;
-  // final String categoryTitle;
 
-  // CategoryMealsScreen(this.categoryId, this.categoryTitle);
+  @override
+  _CategoryMealsScreenState createState() => _CategoryMealsScreenState();
+}
+
+class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
+  String categoryTitle;
+  List<Meal> displayedMeals;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (displayedMeals == null) {
+      final routeArgs = ModalRoute.of(context).settings.arguments as Map<String, String>;
+      final categoryId = routeArgs['id'];
+      categoryTitle = routeArgs['title'];
+
+      displayedMeals = DUMMY_MEALS.where((x) => x.categories.contains(categoryId)).toList();
+    }
+  }
+
+  void _removeMeal(String mealId) {
+    setState(() {
+      displayedMeals.removeWhere((meal) => meal.id == mealId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context).settings.arguments as Map<String, String>;
-    final categoryTitle = routeArgs['title'];
-    final categoryId = routeArgs['id'];
-
-    final filteredMeals = DUMMY_MEALS
-        .where(
-          (x) => x.categories.contains(categoryId),
-        )
-        .toList();
-
     return Scaffold(
       appBar: AppBar(title: Text(categoryTitle)),
       body: ListView.builder(
         itemBuilder: (ctx, idx) {
-          return MealItem(filteredMeals[idx]);
+          return MealItem(displayedMeals[idx], _removeMeal);
         },
-        itemCount: filteredMeals.length,
+        itemCount: displayedMeals.length,
       ),
     );
   }
