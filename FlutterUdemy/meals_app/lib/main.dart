@@ -31,6 +31,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var filters = MealFiltersObj();
   List<Meal> availableMeals = DUMMY_MEALS;
+  List<Meal> favoriteMeals = [];
 
   void saveFilters(MealFiltersObj newFilters) {
     setState(() {
@@ -43,6 +44,23 @@ class _MyAppState extends State<MyApp> {
         return true;
       }).toList();
     });
+  }
+
+  bool isMealFavorite(String mealId) => favoriteMeals.any((m) => m.id == mealId);
+
+  void toggleFavoriteMeal(String mealId) {
+    final idx = favoriteMeals.indexWhere((m) => m.id == mealId);
+    if (idx >= 0) {
+      setState(() {
+        favoriteMeals.removeAt(idx);
+      });
+    } else {
+      setState(() {
+        favoriteMeals.add(
+          DUMMY_MEALS.firstWhere((m) => m.id == mealId),
+        );
+      });
+    }
   }
 
   @override
@@ -72,9 +90,9 @@ class _MyAppState extends State<MyApp> {
       theme: theme,
       initialRoute: '/', // default je '/'
       routes: {
-        '/': (ctx) => TabsScreen(),
+        '/': (ctx) => TabsScreen(favoriteMeals),
         CategoryMealsScreen.route: (ctx) => CategoryMealsScreen(availableMeals),
-        MealDetailScreen.route: (ctx) => MealDetailScreen(),
+        MealDetailScreen.route: (ctx) => MealDetailScreen(toggleFavoriteMeal, isMealFavorite),
         FiltersScreen.route: (ctex) => FiltersScreen(filters, saveFilters),
       },
       // onGenerateRoute: (settings) {
