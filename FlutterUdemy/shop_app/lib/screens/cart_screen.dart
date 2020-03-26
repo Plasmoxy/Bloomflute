@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/components/cart_item_display.dart';
 import 'package:shop_app/model/cart.dart';
 
 class CartScreen extends StatelessWidget {
@@ -15,17 +16,38 @@ class CartScreen extends StatelessWidget {
       ),
       body: Column(children: <Widget>[
         Card(
+          elevation: 3,
           margin: EdgeInsets.all(15),
           child: Padding(
-            padding: EdgeInsets.all(8),
-            child: Row(children: <Widget>[
-              Text('Total:', style: TextStyle(fontSize: 20)),
-              SizedBox(width: 10),
-              Chip(
-                label: Text('${cart.totalSum} €'),
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
-            ]),
+            padding: EdgeInsets.all(7),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Total:', style: TextStyle(fontSize: 20)),
+                Spacer(),
+                Chip(
+                  label: Text(
+                    '${cart.totalSum} €',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryTextTheme.title.color,
+                    ),
+                  ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+                FlatButton(
+                  child: Text('ORDER NOW'),
+                  textColor: Theme.of(context).primaryColor,
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+        Expanded(
+          child: ListView.builder(
+            itemCount: cart.itemCount,
+            itemBuilder: (ctx, idx) => CartItemDisplay(cart.items.values.toList()[idx]),
           ),
         ),
       ]),

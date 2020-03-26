@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/components/badge.dart';
 import 'package:shop_app/components/products_grid.dart';
 import 'package:shop_app/model/cart.dart';
+import 'package:shop_app/screens/cart_screen.dart';
 
 enum FilterOptions { Favorites, All }
 
@@ -29,7 +30,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             // this child wont react to Cart changes, because its outside the builder!
             child: IconButton(
               icon: Icon(Icons.shopping_cart),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.route);
+              },
             ),
           ),
           PopupMenuButton(
