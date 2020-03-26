@@ -11,8 +11,9 @@ class CartItemDisplay extends StatelessWidget {
   final String title;
   final double price;
   final int quantity;
+  final String imageUrl;
 
-  CartItemDisplay(this.id, this.productId, this.title, this.price, this.quantity);
+  CartItemDisplay(this.id, this.productId, this.title, this.price, this.quantity, this.imageUrl);
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +43,7 @@ class CartItemDisplay extends StatelessWidget {
           padding: EdgeInsets.all(0),
           child: ListTile(
             leading: CircleAvatar(
-              child: FittedBox(
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text('$price €'),
-                ),
-              ),
+              backgroundImage: NetworkImage(imageUrl),
             ),
             title: Text(title),
             subtitle: Text('Total: ${price * quantity} €'),

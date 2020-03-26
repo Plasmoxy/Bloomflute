@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/components/cart_item_display.dart';
 import 'package:shop_app/model/cart.dart';
+import 'package:shop_app/model/products.dart';
 
 class CartScreen extends StatelessWidget {
   static const route = "/cart-screen";
@@ -9,6 +10,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    final products = Provider.of<Products>(context);
     final values = cart.items.values.toList();
     final keys = cart.items.keys.toList();
 
@@ -55,6 +57,7 @@ class CartScreen extends StatelessWidget {
               values[i].title,
               values[i].price,
               values[i].quantity,
+              products.findById(keys[i]).imageUrl,
             ),
           ),
         ),
