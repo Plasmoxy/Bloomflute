@@ -11,11 +11,11 @@ class ProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final products = Provider.of<Products>(context);
-    final items = showOnlyFavorites ? products.favoriteItems : products.items;
+    final displayItems = showOnlyFavorites ? products.favoriteItems : products.items;
 
     return GridView.builder(
       padding: EdgeInsets.all(10),
-      itemCount: items.length,
+      itemCount: displayItems.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 3 / 2,
@@ -25,7 +25,7 @@ class ProductsGrid extends StatelessWidget {
 
       // ChangeNotifierProvider disposes data automatically!
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-        value: items[i],
+        value: displayItems[i],
         child: ProductItem(),
       ),
     );
