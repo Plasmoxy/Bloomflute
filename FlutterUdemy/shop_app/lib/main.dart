@@ -19,8 +19,8 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: 'Shop App',
         theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
+          primarySwatch: Colors.teal,
+          accentColor: Colors.deepPurpleAccent,
           fontFamily: 'Lato',
         ),
         routes: {
