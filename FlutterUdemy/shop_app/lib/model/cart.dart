@@ -20,6 +20,10 @@ class Cart with ChangeNotifier {
 
   Map<String, CartItem> get items => {..._items};
   int get itemCount => _items.length;
+  double get totalSum => _items.entries.fold(
+        0,
+        (a, x) => a + x.value.price * x.value.quantity,
+      );
 
   // pozn: prerobil som to na mutable modifikacie
   // lebo ako je to imo dost retardovane pouzivat tie immutable
