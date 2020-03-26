@@ -21,6 +21,8 @@ class ProductsOverviewScreen extends StatelessWidget {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
+
+        // ChangeNotifierProvider disposes data automatically!
         itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
           value: products[i],
           child: ProductItem(),
