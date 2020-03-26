@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/components/badge.dart';
 import 'package:shop_app/components/products_grid.dart';
+import 'package:shop_app/model/cart.dart';
 
 enum FilterOptions { Favorites, All }
 
@@ -17,6 +20,18 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       appBar: AppBar(
         title: Text('Shop XD'),
         actions: <Widget>[
+          // apply Consumer ONLY to the Badge, leave its children alone! :(((
+          Consumer<Cart>(
+            builder: (_, cart, ch) => Badge(
+              child: ch,
+              value: cart.itemCount.toString(),
+            ),
+            // this child wont react to Cart changes, because its outside the builder!
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {},
+            ),
+          ),
           PopupMenuButton(
             onSelected: (FilterOptions val) {
               setState(() {
@@ -38,7 +53,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 value: FilterOptions.All,
               )
             ],
-          )
+          ),
         ],
       ),
       body: ProductsGrid(showOnlyFavorites),

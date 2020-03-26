@@ -16,9 +16,10 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  final _items = Map<String, CartItem>();
+  final Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items => {..._items};
+  int get itemCount => _items.length;
 
   // pozn: prerobil som to na mutable modifikacie
   // lebo ako je to imo dost retardovane pouzivat tie immutable
