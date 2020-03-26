@@ -25,21 +25,17 @@ class Cart with ChangeNotifier {
         (a, x) => a + x.value.price * x.value.quantity,
       );
 
+  void removeItem(String productId) {
+    _items.remove(productId);
+    notifyListeners();
+  }
+
   // pozn: prerobil som to na mutable modifikacie
   // lebo ako je to imo dost retardovane pouzivat tie immutable
   // metody teraz, ale moze zrobit bugs! so achtung.
   void addItem(Product p) {
     if (_items.containsKey(p.id)) {
       _items[p.id].quantity++;
-      // _items.update(
-      //   p.id,
-      //   (ex) => CartItem(
-      //     id: ex.id,
-      //     title: ex.title,
-      //     price: ex.price,
-      //     quantity: ex.quantity + 1,
-      //   ),
-      // );
     } else {
       _items[p.id] = CartItem(
         id: DateTime.now().toString(),
@@ -47,15 +43,6 @@ class Cart with ChangeNotifier {
         price: p.price,
         quantity: 1,
       );
-      // _items.putIfAbsent(
-      //   p.id,
-      //   () => CartItem(
-      //     id: DateTime.now().toString(),
-      //     title: p.title,
-      //     price: p.price,
-      //     quantity: 1,
-      //   ),
-      // );
     }
     notifyListeners();
   }
