@@ -34,18 +34,21 @@ class _OrderItemState extends State<OrderItem> {
         if (_expanded)
           Container(
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            height: min(widget.order.items.length * 20.0 + 10, 100),
-            child: ListView(
+            //height: min(widget.order.items.length * 20.0 + 10, 100),
+            child: Column(
               children: widget.order.items
-                  .map((x) => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            x.title,
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          Text('${x.quantity}x ${x.price} €'),
-                        ],
+                  .map((x) => Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              x.title,
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Text('${x.quantity}x ${x.price} €'),
+                          ],
+                        ),
                       ))
                   .toList(),
             ),
