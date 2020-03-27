@@ -34,7 +34,7 @@ class CartScreen extends StatelessWidget {
                 Spacer(),
                 Chip(
                   label: Text(
-                    '${cart.totalSum} €',
+                    '${cart.totalSum.toStringAsFixed(2)} €',
                     style: TextStyle(
                       color: Theme.of(context).primaryTextTheme.title.color,
                     ),
@@ -53,6 +53,7 @@ class CartScreen extends StatelessWidget {
             ),
           ),
         ),
+        Text('(Swipe to remove item from cart)'),
         SizedBox(height: 10),
         Expanded(
           child: ListView.builder(
