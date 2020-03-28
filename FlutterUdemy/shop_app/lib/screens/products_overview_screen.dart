@@ -4,9 +4,8 @@ import 'package:shop_app/components/app_drawer.dart';
 import 'package:shop_app/components/badge.dart';
 import 'package:shop_app/components/products_grid.dart';
 import 'package:shop_app/model/cart.dart';
+import 'package:shop_app/model/theme_preference.dart';
 import 'package:shop_app/screens/cart_screen.dart';
-
-enum FilterOptions { Favorites, All }
 
 class ProductsOverviewScreen extends StatefulWidget {
   @override
@@ -18,6 +17,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themePref = Provider.of<ThemePreference>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Shop XD'),
@@ -37,26 +38,36 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             ),
           ),
           PopupMenuButton(
-            onSelected: (FilterOptions val) {
-              setState(() {
-                if (val == FilterOptions.All) {
-                  showOnlyFavorites = false;
-                } else {
-                  showOnlyFavorites = true;
-                }
-              });
-            },
             icon: Icon(Icons.more_vert),
             itemBuilder: (ctx) => [
               PopupMenuItem(
                 child: Text('Only Favorites'),
-                value: FilterOptions.Favorites,
+                value: "favorites",
               ),
               PopupMenuItem(
                 child: Text('Show All'),
-                value: FilterOptions.All,
-              )
+                value: "all",
+              ),
+              PopupMenuItem(
+                child: Text('Toggle dark theme!'),
+                value: "darkTheme",
+              ),
             ],
+            onSelected: (String val) {
+              setState(() {
+                switch (val) {
+                  case "favorites":
+                    showOnlyFavorites = true;
+                    break;
+                  case "all":
+                    showOnlyFavorites = false;
+                    break;
+                  case "darkTheme":
+                    themePref.isDarkTheme = !themePref.isDarkTheme;
+                    break;
+                }
+              });
+            },
           ),
         ],
       ),
