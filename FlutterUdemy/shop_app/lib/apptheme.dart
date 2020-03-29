@@ -7,8 +7,11 @@ ThemeData darkTheme() {
     primaryColor: Colors.deepPurpleAccent,
     accentColor: Colors.deepPurpleAccent,
     appBarTheme: ThemeData.dark().appBarTheme.copyWith(
-          color: Colors.black26,
+          color: Colors.black,
         ),
+    dialogBackgroundColor: Colors.red,
+    cardColor: Color(0xFF111115),
+    canvasColor: Colors.black,
   );
 }
 
