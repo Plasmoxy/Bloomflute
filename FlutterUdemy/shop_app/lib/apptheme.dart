@@ -10,7 +10,7 @@ ThemeData darkTheme() {
           color: Colors.black,
         ),
     dialogBackgroundColor: Colors.red,
-    cardColor: Color(0xFF111115),
+    cardColor: Color(0xFF111112),
     canvasColor: Colors.black,
   );
 }
