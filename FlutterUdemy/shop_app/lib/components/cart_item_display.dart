@@ -34,6 +34,26 @@ class CartItemDisplay extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) => cart.removeItem(productId),
+      confirmDismiss: (direction) => showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('Are you sure about that?'),
+          content: Text('Nibba do u rly want to remove from cart??'),
+          actions: <Widget>[
+            FlatButton(
+                child: Text('NO.,'),
+                onPressed: () {
+                  // showDialog returns the future of navigator pop
+                  Navigator.of(ctx).pop(false);
+                }),
+            FlatButton(
+                child: Text('Y E S'),
+                onPressed: () {
+                  Navigator.of(ctx).pop(true);
+                }),
+          ],
+        ),
+      ),
       child: Card(
         margin: EdgeInsets.symmetric(
           horizontal: 15,

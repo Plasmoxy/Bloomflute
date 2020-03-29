@@ -47,6 +47,7 @@ class ProductItem extends StatelessWidget {
             onPressed: () {
               cart.addItem(product);
               // snacc
+              Scaffold.of(context).hideCurrentSnackBar();
               Scaffold.of(context).showSnackBar(SnackBar(
                 content: Text('1x ${product.title} added to cart.'),
                 duration: Duration(seconds: 2),
