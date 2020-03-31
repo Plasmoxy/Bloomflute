@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/model/product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const route = '/edit-product';
@@ -12,6 +13,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _descriptionFocus = FocusNode();
   final _imageUrlFocus = FocusNode();
   final _imageUrlController = TextEditingController();
+  final _form = GlobalKey<FormState>();
+
+  var _formTitle = '';
+  var _formPrice = 0.0;
+  var _formDescription = '';
+  var _formImageUrl = '';
 
   void _onImgUrlLostFocus() {
     if (!_imageUrlFocus.hasFocus) {
@@ -19,7 +26,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveProduct() {}
+  void _saveForm() {
+    if (!_form.currentState.validate()) return;
+    _form.currentState.save();
+  }
 
   @override
   void initState() {
@@ -45,6 +55,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ),
       // the formmmm
       body: Form(
+        key: _form,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
             top: 20,
@@ -63,6 +74,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocus),
+                onSaved: (value) => _formTitle = value,
+                validator: (value) => value.isEmpty ? 'Title musn\'t be empty!' : null,
               ),
               SizedBox(height: 10),
 
@@ -77,6 +90,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 keyboardType: TextInputType.number,
                 focusNode: _priceFocus,
                 onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_descriptionFocus),
+                onSaved: (value) => _formPrice = double.parse(value),
+                validator: (value) {
+                  if (value.isEmpty) return 'Please enter a price!';
+                  if (double.tryParse(value) == null || double.parse(value) < 0.0) return 'Please enter a valid price!';
+                  return null;
+                },
               ),
               SizedBox(height: 10),
 
@@ -90,6 +109,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocus,
+                onSaved: (value) => _formDescription = value,
+                validator: (value) => value.isEmpty ? 'Description musn\'t be empty!' : null,
               ),
               SizedBox(height: 10),
 
@@ -123,6 +144,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                     keyboardType: TextInputType.url,
                     textInputAction: TextInputAction.done,
+                    onSaved: (value) => _formImageUrl = value,
                   ),
                 ),
               ]),
@@ -132,7 +154,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
-        onPressed: _saveProduct,
+        onPressed: _saveForm,
       ),
     );
   }
