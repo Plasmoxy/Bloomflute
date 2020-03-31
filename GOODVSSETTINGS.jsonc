@@ -38,14 +38,15 @@
         "editor.defaultFormatter": "Dart-Code.dart-code",
         "editor.formatOnSave": true,
     },
-    "dart.closingLabels": false,
+    "dart.closingLabels": true,
+    "dart.lineLength": 1000,
 
     // BRAKETS
     "editor.matchBrackets": "never",
     "bracket-pair-colorizer-2.showHorizontalScopeLine": false,
     "bracket-pair-colorizer-2.colorMode": "Consecutive",
     "bracket-pair-colorizer-2.colors": [
-        "#3eb4f4",
+        "#9cadc4",
     ],
 
 
@@ -54,16 +55,21 @@
         "editorWarning.foreground": "#5e5e5e",
         "[City Lights]": {
             // "editor.background": "#1c1d21"
+            "dart.closingLabels": "#526068",
+            "debugToolBar.background": "#111314" // fix citylights bug
         }
     },
     "editor.tokenColorCustomizations": {
         "[City Lights]": {
             "types": "#f1c753",
-            "comments": "#757d9b"
+            "comments": "#757d9b",
         }
     },
 
     // EDITORRRR
     "editor.fontSize": 16,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
     "workbench.colorTheme": "City Lights"
 }
