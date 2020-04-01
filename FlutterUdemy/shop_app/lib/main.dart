@@ -31,13 +31,21 @@ class App extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Shop App',
           theme: themePref.isDarkTheme ? darkTheme() : lightTheme(),
-          routes: {
-            '/': (ctx) => ProductsOverviewScreen(),
-            ProductDetailScreen.route: (ctx) => ProductDetailScreen(),
-            CartScreen.route: (ctx) => CartScreen(),
-            OrdersScreen.route: (ctx) => OrdersScreen(),
-            UserProductsScreen.route: (ctx) => UserProductsScreen(),
-            EditProductScreen.route: (ctx) => EditProductScreen(),
+
+          // route generation
+          onGenerateRoute: (RouteSettings settings) {
+            print('Building route for ${settings.name}.');
+            final routes = <String, WidgetBuilder>{
+              '/': (ctx) => ProductsOverviewScreen(),
+              ProductDetailScreen.route: (ctx) => ProductDetailScreen(),
+              CartScreen.route: (ctx) => CartScreen(),
+              OrdersScreen.route: (ctx) => OrdersScreen(),
+              UserProductsScreen.route: (ctx) => UserProductsScreen(),
+              EditProductScreen.route: (ctx) => EditProductScreen(settings.arguments as String),
+            };
+            WidgetBuilder builder = routes[settings.name];
+            // note: wrap builder call into another lambda in case of problems
+            return MaterialPageRoute(builder: builder, settings: settings);
           },
         ),
       ),

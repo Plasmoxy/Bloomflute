@@ -5,6 +5,9 @@ import 'package:shop_app/model/products.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const route = '/edit-product';
+  final String productId;
+
+  EditProductScreen(this.productId);
 
   @override
   _EditProductScreenState createState() => _EditProductScreenState();
@@ -32,23 +35,55 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!_form.currentState.validate()) return;
     _form.currentState.save();
 
-    // save em product
-    Provider.of<Products>(context, listen: false).addProduct(Product(
-      title: _formTitle,
-      description: _formDescription,
-      imageUrl: _formImageUrl,
-      price: _formPrice,
-      id: null,
-    ));
+    if (widget.productId != null) {
+      // update a product
+      final before = Provider.of<Products>(context, listen: false).findById(widget.productId);
+
+      Provider.of<Products>(context, listen: false).updateProduct(
+        widget.productId,
+        Product(
+          title: _formTitle,
+          description: _formDescription,
+          imageUrl: _formImageUrl,
+          price: _formPrice,
+          id: before.id,
+          isFavorite: before.isFavorite,
+        ),
+      );
+    } else {
+      // save em product if new
+      Provider.of<Products>(context, listen: false).addProduct(Product(
+        title: _formTitle,
+        description: _formDescription,
+        imageUrl: _formImageUrl,
+        price: _formPrice,
+        id: null,
+      ));
+    }
 
     // leave this page on save
     Navigator.of(context).pop();
   }
 
+  // note ! cannot use ModalRoute within initstate
+  // in initstate, the state hasn't yet loaded its dependencies
   @override
   void initState() {
     super.initState();
     _imageUrlFocus.addListener(_onImgUrlLostFocus);
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (widget.productId != null) {
+      final product = Provider.of<Products>(context, listen: false).findById(widget.productId);
+      // preset the fields
+      _formTitle = product.title;
+      _formDescription = product.description;
+      _imageUrlController.text = product.imageUrl;
+      _formPrice = product.price;
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -88,6 +123,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocus),
+                initialValue: _formTitle,
                 onSaved: (value) => _formTitle = value,
                 validator: (value) => value.isEmpty ? 'Title musn\'t be empty!' : null,
               ),
@@ -104,6 +140,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 keyboardType: TextInputType.number,
                 focusNode: _priceFocus,
                 onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_descriptionFocus),
+                initialValue: _formPrice.toString(),
                 onSaved: (value) => _formPrice = double.parse(value),
                 validator: (value) {
                   if (value.isEmpty) return 'Please enter a price!';
@@ -123,6 +160,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocus,
+                initialValue: _formDescription,
                 onSaved: (value) => _formDescription = value,
                 validator: (value) => value.isEmpty ? 'Description musn\'t be empty!' : null,
               ),
