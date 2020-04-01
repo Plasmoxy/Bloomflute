@@ -9,7 +9,14 @@ class Products with ChangeNotifier {
   List<Product> get favoriteItems => _items.where((x) => x.isFavorite).toList();
 
   void addProduct(Product p) {
-    // _items.add(p);
+    final newProduct = Product(
+      title: p.title,
+      description: p.description,
+      imageUrl: p.imageUrl,
+      price: p.price,
+      id: DateTime.now().toString(),
+    );
+    _items.add(newProduct);
     notifyListeners();
   }
 
