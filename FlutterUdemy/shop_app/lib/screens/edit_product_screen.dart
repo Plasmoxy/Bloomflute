@@ -17,7 +17,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocus = FocusNode();
   final _descriptionFocus = FocusNode();
   final _imageUrlFocus = FocusNode();
-  final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
 
   var _formTitle = '';
@@ -80,7 +79,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       // preset the fields
       _formTitle = product.title;
       _formDescription = product.description;
-      _imageUrlController.text = product.imageUrl;
+      _formImageUrl = product.imageUrl;
       _formPrice = product.price;
     }
     super.didChangeDependencies();
@@ -92,7 +91,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _descriptionFocus.dispose();
     _imageUrlFocus.removeListener(_onImgUrlLostFocus);
     _imageUrlFocus.dispose();
-    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -175,18 +173,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.blue),
                   ),
-                  child: _imageUrlController.text.isEmpty
+                  child: _formImageUrl.isEmpty
                       ? Center(child: Text('preview'))
                       : FittedBox(
                           child: Image.network(
-                            _imageUrlController.text,
+                            _formImageUrl,
                             fit: BoxFit.cover,
                           ),
                         ),
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _imageUrlController,
                     onFieldSubmitted: (x) => setState(null),
                     focusNode: _imageUrlFocus,
                     decoration: InputDecoration(
@@ -196,6 +193,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                     keyboardType: TextInputType.url,
                     textInputAction: TextInputAction.done,
+                    onChanged: (tx) => _formImageUrl = tx,
                     onSaved: (value) => _formImageUrl = value,
                   ),
                 ),
