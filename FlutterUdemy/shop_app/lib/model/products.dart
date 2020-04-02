@@ -1,18 +1,28 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:shop_app/model/mock.dart';
 import 'package:shop_app/model/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_app/util.dart';
 
 class Products with ChangeNotifier {
-  final dbUrl = '$FHOST/products';
+  final dbUrl = '$FHOST/products.json';
 
-  List<Product> _items = [...MOCK_PRODUCTS];
+  List<Product> _items = [];
 
   List<Product> get items => [..._items]; // copy
   List<Product> get favoriteItems => _items.where((x) => x.isFavorite).toList();
+
+  Future<void> fetchAndSetProducts() async {
+    final resp = await http.get(dbUrl);
+    final productsMap = jsonDecode(resp.body) as Map<String, dynamic>;
+    _items = productsMap.keys.map((id) {
+      final prod = productsMap[id];
+      prod['id'] = id;
+      return Product.fromJson(prod);
+    }).toList();
+    notifyListeners();
+  }
 
   Future<void> addProduct(Product p) async {
     // post to server

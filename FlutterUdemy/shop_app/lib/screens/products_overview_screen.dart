@@ -4,6 +4,7 @@ import 'package:shop_app/components/app_drawer.dart';
 import 'package:shop_app/components/badge.dart';
 import 'package:shop_app/components/products_grid.dart';
 import 'package:shop_app/model/cart.dart';
+import 'package:shop_app/model/products.dart';
 import 'package:shop_app/model/theme_preference.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 
@@ -13,7 +14,18 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
+  var _init = true;
   var showOnlyFavorites = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_init) {
+      final products = Provider.of<Products>(context, listen: false);
+      products.fetchAndSetProducts();
+    }
+    _init = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
