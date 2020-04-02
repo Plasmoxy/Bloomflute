@@ -30,7 +30,7 @@ class App extends StatelessWidget {
         builder: (context, themePref, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Shop App',
-          theme: themePref.isDarkTheme ? darkTheme() : lightTheme(),
+          theme: themePref.isDarkTheme ? darkTheme : lightTheme,
 
           // route generation
           onGenerateRoute: (RouteSettings settings) {
