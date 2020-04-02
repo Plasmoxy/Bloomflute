@@ -25,7 +25,7 @@ class Product with ChangeNotifier {
         imageUrl = j['imageUrl'],
         isFavorite = j['isFavorite'];
 
-  Map<String, dynamic> get asJson => {
+  Map<String, dynamic> get json => {
         'id': id,
         'title': title,
         'description': description,
