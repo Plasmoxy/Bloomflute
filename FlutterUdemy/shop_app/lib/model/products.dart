@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shop_app/model/mock.dart';
 import 'package:shop_app/model/product.dart';
+import 'package:http/http.dart' as http;
+import 'package:shop_app/util.dart';
 
 class Products with ChangeNotifier {
+  final dbUrl = '$FHOST/products.json';
+
   List<Product> _items = [...MOCK_PRODUCTS];
 
   List<Product> get items => [..._items]; // copy
@@ -17,6 +23,9 @@ class Products with ChangeNotifier {
       id: DateTime.now().toString(),
     );
     _items.add(newProduct);
+
+    print("POSTING");
+    http.post('https://pmxyshopapp.firebaseio.com/products.json', body: newProduct.json);
     notifyListeners();
   }
 
