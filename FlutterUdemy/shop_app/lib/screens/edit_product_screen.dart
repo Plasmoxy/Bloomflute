@@ -79,7 +79,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             content: Text(e.toString()),
             actions: <Widget>[
               FlatButton(
-                child: Text('Ok'),
+                child: Text('OK'),
                 onPressed: () => Navigator.of(context).pop(),
               )
             ],
@@ -128,112 +128,112 @@ class _EditProductScreenState extends State<EditProductScreen> {
         title: Text('Edit product.'),
       ),
       // the formmmm
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Form(
-              key: _form,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  top: 20,
-                  right: 20,
-                  left: 20,
-                  bottom: 100,
+      body: Form(
+        key: _form,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            top: 20,
+            right: 20,
+            left: 20,
+            bottom: 100,
+          ),
+          child: Column(
+            children: <Widget>[
+              // title
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                  alignLabelWithHint: true,
                 ),
-                child: Column(
-                  children: <Widget>[
-                    // title
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Title',
-                        border: OutlineInputBorder(),
-                        alignLabelWithHint: true,
-                      ),
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocus),
-                      initialValue: _formTitle,
-                      onSaved: (value) => _formTitle = value,
-                      validator: (value) => value.isEmpty ? 'Title musn\'t be empty!' : null,
-                    ),
-                    SizedBox(height: 10),
-
-                    // price
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Price',
-                        border: OutlineInputBorder(),
-                        alignLabelWithHint: true,
-                      ),
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      focusNode: _priceFocus,
-                      onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_descriptionFocus),
-                      initialValue: _formPrice.toString(),
-                      onSaved: (value) => _formPrice = double.parse(value),
-                      validator: (value) {
-                        if (value.isEmpty) return 'Please enter a price!';
-                        if (double.tryParse(value) == null || double.parse(value) < 0.0) return 'Please enter a valid price!';
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 10),
-
-                    // description
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Description',
-                        border: OutlineInputBorder(),
-                        alignLabelWithHint: true,
-                      ),
-                      maxLines: 3,
-                      keyboardType: TextInputType.multiline,
-                      focusNode: _descriptionFocus,
-                      initialValue: _formDescription,
-                      onSaved: (value) => _formDescription = value,
-                      validator: (value) => value.isEmpty ? 'Description musn\'t be empty!' : null,
-                    ),
-                    SizedBox(height: 10),
-
-                    // image
-                    Row(children: <Widget>[
-                      Container(
-                        width: 100,
-                        height: 100,
-                        margin: EdgeInsets.only(top: 8, right: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.blue),
-                        ),
-                        child: _formImageUrl.isEmpty
-                            ? Center(child: Text('preview'))
-                            : FittedBox(
-                                child: Image.network(
-                                  _formImageUrl,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          onFieldSubmitted: (x) => setState(() {}),
-                          focusNode: _imageUrlFocus,
-                          decoration: InputDecoration(
-                            labelText: 'Image URL',
-                            border: OutlineInputBorder(),
-                            alignLabelWithHint: true,
-                          ),
-                          keyboardType: TextInputType.url,
-                          textInputAction: TextInputAction.done,
-                          initialValue: _formImageUrl,
-                          onChanged: (tx) => _formImageUrl = tx,
-                          onSaved: (value) => _formImageUrl = value,
-                        ),
-                      ),
-                    ]),
-                  ],
-                ),
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocus),
+                initialValue: _formTitle,
+                onSaved: (value) => _formTitle = value,
+                validator: (value) => value.isEmpty ? 'Title musn\'t be empty!' : null,
               ),
-            ),
+              SizedBox(height: 10),
+
+              // price
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Price',
+                  border: OutlineInputBorder(),
+                  alignLabelWithHint: true,
+                ),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                focusNode: _priceFocus,
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_descriptionFocus),
+                initialValue: _formPrice.toString(),
+                onSaved: (value) => _formPrice = double.parse(value),
+                validator: (value) {
+                  if (value.isEmpty) return 'Please enter a price!';
+                  if (double.tryParse(value) == null || double.parse(value) < 0.0) return 'Please enter a valid price!';
+                  return null;
+                },
+              ),
+              SizedBox(height: 10),
+
+              // description
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  border: OutlineInputBorder(),
+                  alignLabelWithHint: true,
+                ),
+                maxLines: 3,
+                keyboardType: TextInputType.multiline,
+                focusNode: _descriptionFocus,
+                initialValue: _formDescription,
+                onSaved: (value) => _formDescription = value,
+                validator: (value) => value.isEmpty ? 'Description musn\'t be empty!' : null,
+              ),
+              SizedBox(height: 10),
+
+              // image
+              Row(children: <Widget>[
+                Container(
+                  width: 80,
+                  height: 80,
+                  margin: EdgeInsets.only(top: 8, right: 10),
+                  child: ClipRRect(
+                    child: _formImageUrl.isEmpty
+                        ? Center(child: Text('preview'))
+                        : Image.network(
+                            _formImageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    onFieldSubmitted: (x) => setState(() {}),
+                    focusNode: _imageUrlFocus,
+                    decoration: InputDecoration(
+                      labelText: 'Image URL',
+                      border: OutlineInputBorder(),
+                      alignLabelWithHint: true,
+                    ),
+                    keyboardType: TextInputType.url,
+                    textInputAction: TextInputAction.done,
+                    initialValue: _formImageUrl,
+                    onChanged: (tx) => _formImageUrl = tx,
+                    onSaved: (value) => _formImageUrl = value,
+                  ),
+                ),
+              ]),
+
+              // loading
+              if (_isLoading)
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+            ],
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
         onPressed: _saveForm,

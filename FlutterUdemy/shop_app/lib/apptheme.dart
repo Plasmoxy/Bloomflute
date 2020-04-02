@@ -12,6 +12,13 @@ ThemeData darkTheme() {
     dialogBackgroundColor: Colors.red,
     cardColor: Color(0xFF111112),
     canvasColor: Colors.black,
+    dialogTheme: ThemeData.dark().dialogTheme.copyWith(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(16.0),
+            ),
+          ),
+        ),
   );
 }
 
