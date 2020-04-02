@@ -184,7 +184,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    onFieldSubmitted: (x) => setState(null),
+                    onFieldSubmitted: (x) => setState(() {}),
                     focusNode: _imageUrlFocus,
                     decoration: InputDecoration(
                       labelText: 'Image URL',
@@ -193,6 +193,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                     keyboardType: TextInputType.url,
                     textInputAction: TextInputAction.done,
+                    initialValue: _formImageUrl,
                     onChanged: (tx) => _formImageUrl = tx,
                     onSaved: (value) => _formImageUrl = value,
                   ),
