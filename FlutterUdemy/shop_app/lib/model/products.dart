@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shop_app/util.dart';
 
 class Products with ChangeNotifier {
-  final dbUrl = '$FHOST/products';
+  final dbUrl = '$FHOST/products.json';
 
   List<Product> _items = [...MOCK_PRODUCTS];
 

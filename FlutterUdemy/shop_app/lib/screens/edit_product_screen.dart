@@ -198,12 +198,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   height: 80,
                   margin: EdgeInsets.only(top: 8, right: 10),
                   child: ClipRRect(
-                    child: _formImageUrl.isEmpty
-                        ? Center(child: Text('preview'))
-                        : Image.network(
-                            _formImageUrl,
-                            fit: BoxFit.cover,
-                          ),
+                    child: FittedBox(
+                      child: _formImageUrl.isEmpty
+                          ? Center(child: Text('preview'))
+                          : Image.network(
+                              _formImageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
