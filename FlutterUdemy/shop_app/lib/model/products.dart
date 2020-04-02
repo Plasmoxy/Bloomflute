@@ -14,18 +14,24 @@ class Products with ChangeNotifier {
   List<Product> get items => [..._items]; // copy
   List<Product> get favoriteItems => _items.where((x) => x.isFavorite).toList();
 
-  void addProduct(Product p) {
-    final newProduct = Product(
+  void addProduct(Product p) async {
+    // post to server
+    print('Posting new product to server');
+    final resp = await http.post(
+      dbUrl,
+      // note: id: null gets auto ignored
+      body: json.encode(p.asJson),
+    );
+    final body = json.decode(resp.body);
+
+    // add to memory by using retrieved db id
+    _items.add(Product(
       title: p.title,
       description: p.description,
       imageUrl: p.imageUrl,
       price: p.price,
-      id: DateTime.now().toString(),
-    );
-    _items.add(newProduct);
-
-    print("POSTING");
-    http.post('https://pmxyshopapp.firebaseio.com/products.json', body: newProduct.json);
+      id: body['name'],
+    ));
     notifyListeners();
   }
 
