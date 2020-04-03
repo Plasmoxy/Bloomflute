@@ -4,43 +4,45 @@ import 'package:shop_app/components/app_drawer.dart';
 import 'package:shop_app/components/order_item.dart';
 import 'package:shop_app/model/orders.dart';
 
-class OrdersScreen extends StatefulWidget {
+class OrdersScreen extends StatelessWidget {
   static const route = "/orders";
 
   @override
-  _OrdersScreenState createState() => _OrdersScreenState();
-}
-
-class _OrdersScreenState extends State<OrdersScreen> {
-  var _loading = false;
-
-  @override
-  void initState() {
-    final orders = Provider.of<Orders>(context, listen: false);
-    _loading = true;
-
-    () async {
-      await orders.fetchAndSetOrders();
-      setState(() => _loading = false);
-    }();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<Orders>(context);
+    // WARNING: setting up a provider listener here
+    // is bad because we are using FutureBuilder
+    // = futurebuilder will launch the async method which
+    // will notify listeners including this one
+    // it is ok to run it like this,
+    // but if we really want to listen to provider state
+    // we add Consumer
+    final orders = Provider.of<Orders>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Your orders'),
       ),
       drawer: AppDrawer(),
-      body: _loading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: orders.orders.length,
-              itemBuilder: (ctx, i) => OrderItem(orders.orders[i]),
-            ),
+      body: FutureBuilder(
+        future: orders.fetchAndSetOrders(),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // waiting
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.error != null) {
+            // error
+            return Text('Error occured');
+          } else {
+            // success
+            return Consumer<Orders>(
+              builder: (ctx, consumed, _) => ListView.builder(
+                itemCount: consumed.orders.length,
+                itemBuilder: (ctx, i) => OrderItem(consumed.orders[i]),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
