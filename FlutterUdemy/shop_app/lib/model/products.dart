@@ -5,6 +5,13 @@ import 'package:shop_app/model/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_app/util.dart';
 
+class ApiError implements Exception {
+  final String message;
+  ApiError(this.message);
+  @override
+  String toString() => message;
+}
+
 class Products with ChangeNotifier {
   List<Product> _items = [];
 
@@ -57,7 +64,11 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
+    final resp = await http.delete('$FHOST/products/$id.json');
+    if (resp.statusCode >= 400) {
+      throw ApiError("Couldn't delete product, status: ${resp.statusCode}");
+    }
     _items.removeWhere((x) => x.id == id);
     notifyListeners();
   }
