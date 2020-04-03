@@ -47,7 +47,7 @@ class Products with ChangeNotifier {
       // server
       await http.patch(
         '$FHOST/products/$id.json',
-        body: jsonEncode(p.json..remove('isFavorite')), // ignore isFavorite
+        body: jsonEncode(p.json..remove('isFavorite')), // ignore isFavorite, but doesnt work anyway meh
       );
       // arr
       _items[i] = p;

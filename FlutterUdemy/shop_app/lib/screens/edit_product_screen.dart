@@ -70,10 +70,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
           id: null,
         ));
       }
-
       // leave when done
       Navigator.of(context).pop();
     } catch (e) {
+      // errors
       print("Error saving product : $e");
       showDialog(
         context: context,
