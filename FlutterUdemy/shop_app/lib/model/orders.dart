@@ -44,6 +44,8 @@ class Orders with ChangeNotifier {
                           ))
                       .toList(),
                 ))
+            .toList()
+            .reversed
             .toList();
 
     notifyListeners();
