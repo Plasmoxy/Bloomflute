@@ -4,8 +4,22 @@ import 'package:shop_app/components/app_drawer.dart';
 import 'package:shop_app/components/order_item.dart';
 import 'package:shop_app/model/orders.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   static const route = "/orders";
+
+  @override
+  _OrdersScreenState createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      final orders = Provider.of<Orders>(context, listen: false);
+      orders.fetchAndSetOrders();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

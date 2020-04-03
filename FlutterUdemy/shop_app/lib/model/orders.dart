@@ -26,7 +26,27 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchAndSetOrders() async {
     final resp = await http.get('$FHOST/orders.json');
-    print(resp.body);
+    final data = jsonDecode(resp.body) as Map<String, dynamic>;
+
+    _orders = data == null
+        ? []
+        : data.entries
+            .map((x) => ShopOrder(
+                  id: x.key,
+                  total: x.value['total'],
+                  dateTime: DateTime.parse(x.value['dateTime']),
+                  items: (x.value['products'] as List<dynamic>)
+                      .map((item) => CartItem(
+                            id: item['id'],
+                            price: item['price'],
+                            quantity: item['quantity'],
+                            title: item['title'],
+                          ))
+                      .toList(),
+                ))
+            .toList();
+
+    notifyListeners();
   }
 
   Future<void> addOrder(List<CartItem> items, double total) async {
@@ -35,9 +55,9 @@ class Orders with ChangeNotifier {
     final resp = await http.post(
       '$FHOST/orders.json',
       body: jsonEncode({
-        'amount': total,
+        'total': total,
         'dateTime': timestamp.toIso8601String(),
-        'products': items
+        'items': items
             .map((x) => {
                   'id': x.id,
                   'title': x.title,

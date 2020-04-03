@@ -13,9 +13,10 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProducts() async {
     final resp = await http.get('$FHOST/products.json');
-    final productsMap = jsonDecode(resp.body) as Map<String, dynamic>;
+    final data = jsonDecode(resp.body) as Map<String, dynamic>;
+
     // map every entry to a product
-    _items = productsMap.entries.map((x) => Product.fromJson(x.key, x.value)).toList();
+    _items = (data == null) ? [] : data.entries.map((x) => Product.fromJson(x.key, x.value)).toList();
     // notiff
     notifyListeners();
   }
