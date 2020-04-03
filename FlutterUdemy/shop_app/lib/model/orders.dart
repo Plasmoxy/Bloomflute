@@ -35,7 +35,7 @@ class Orders with ChangeNotifier {
                   id: x.key,
                   total: x.value['total'],
                   dateTime: DateTime.parse(x.value['dateTime']),
-                  items: (x.value['products'] as List<dynamic>)
+                  items: (x.value['items'] as List<dynamic>)
                       .map((item) => CartItem(
                             id: item['id'],
                             price: item['price'],
