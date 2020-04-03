@@ -26,92 +26,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   var _isLoading = false;
 
-  void _onImgUrlLostFocus() {
-    if (!_imageUrlFocus.hasFocus) {
-      setState(() {});
-    }
-  }
-
-  Future<void> _saveForm() async {
-    final products = Provider.of<Products>(context, listen: false);
-
-    // validate
-    if (!_form.currentState.validate()) return;
-
-    // save form state and trigger loading
-    _form.currentState.save();
-    setState(() => _isLoading = true);
-
-    // catch errors when saving and updating
-    try {
-      // save/update ?
-      if (widget.productId != null) {
-        // update a product
-        final before = products.findById(widget.productId);
-        await products.updateProduct(
-          widget.productId,
-          Product(
-            title: _formTitle,
-            description: _formDescription,
-            imageUrl: _formImageUrl,
-            price: _formPrice,
-            id: before.id,
-            isFavorite: before.isFavorite,
-          ),
-        );
-      } else {
-        // save em product if new
-        print("Saving new product");
-        await products.addProduct(Product(
-          title: _formTitle,
-          description: _formDescription,
-          imageUrl: _formImageUrl,
-          price: _formPrice,
-          id: null,
-        ));
-      }
-      // leave when done
-      Navigator.of(context).pop();
-    } catch (e) {
-      // errors
-      print("Error saving product : $e");
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text('Error saving product!'),
-          content: Text(e.toString()),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          ],
-        ),
-      );
-    }
-
-    setState(() => _isLoading = false);
-  }
-
-  // note ! cannot use ModalRoute within initstate
-  // in initstate, the state hasn't yet loaded its dependencies
   @override
   void initState() {
     super.initState();
-    _imageUrlFocus.addListener(_onImgUrlLostFocus);
-  }
 
-  @override
-  void didChangeDependencies() {
+    final products = Provider.of<Products>(context, listen: false);
+    _imageUrlFocus.addListener(_onImgUrlLostFocus);
+
     if (widget.productId != null) {
-      final product = Provider.of<Products>(context, listen: false).findById(widget.productId);
+      final product = products.findById(widget.productId);
       // preset the fields
       _formTitle = product.title;
       _formDescription = product.description;
       _formImageUrl = product.imageUrl;
       _formPrice = product.price;
     }
-    super.didChangeDependencies();
   }
 
   @override
@@ -121,6 +50,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _imageUrlFocus.removeListener(_onImgUrlLostFocus);
     _imageUrlFocus.dispose();
     super.dispose();
+  }
+
+  void _onImgUrlLostFocus() {
+    if (!_imageUrlFocus.hasFocus) {
+      setState(() {});
+    }
   }
 
   @override
@@ -243,5 +178,66 @@ class _EditProductScreenState extends State<EditProductScreen> {
         onPressed: _saveForm,
       ),
     );
+  }
+
+  Future<void> _saveForm() async {
+    final products = Provider.of<Products>(context, listen: false);
+
+    // validate
+    if (!_form.currentState.validate()) return;
+
+    // save form state and trigger loading
+    _form.currentState.save();
+    setState(() => _isLoading = true);
+
+    // catch errors when saving and updating
+    try {
+      // save/update ?
+      if (widget.productId != null) {
+        // update a product
+        final before = products.findById(widget.productId);
+        await products.updateProduct(
+          widget.productId,
+          Product(
+            title: _formTitle,
+            description: _formDescription,
+            imageUrl: _formImageUrl,
+            price: _formPrice,
+            id: before.id,
+            isFavorite: before.isFavorite,
+          ),
+        );
+      } else {
+        // save em product if new
+        print("Saving new product");
+        await products.addProduct(Product(
+          title: _formTitle,
+          description: _formDescription,
+          imageUrl: _formImageUrl,
+          price: _formPrice,
+          id: null,
+        ));
+      }
+      // leave when done
+      Navigator.of(context).pop();
+    } catch (e) {
+      // errors
+      print("Error saving product : $e");
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('Error saving product!'),
+          content: Text(e.toString()),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        ),
+      );
+    }
+
+    setState(() => _isLoading = false);
   }
 }

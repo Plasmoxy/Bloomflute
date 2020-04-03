@@ -14,23 +14,20 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  var _init = true;
   var _loading = false;
   var showOnlyFavorites = false;
 
-  Future<void> init() async {
-    final products = Provider.of<Products>(context, listen: false);
-
-    setState(() => _loading = true);
-    await products.fetchAndSetProducts();
-    setState(() => _loading = false);
-  }
-
   @override
-  void didChangeDependencies() {
-    if (_init) init();
-    _init = false;
-    super.didChangeDependencies();
+  void initState() {
+    final products = Provider.of<Products>(context, listen: false);
+    _loading = true;
+
+    () async {
+      await products.fetchAndSetProducts();
+      setState(() => _loading = false);
+    }();
+
+    super.initState();
   }
 
   @override
