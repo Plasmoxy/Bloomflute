@@ -24,6 +24,11 @@ class Orders with ChangeNotifier {
 
   List<ShopOrder> get orders => [..._orders];
 
+  Future<void> fetchAndSetOrders() async {
+    final resp = await http.get('$FHOST/orders.json');
+    print(resp.body);
+  }
+
   Future<void> addOrder(List<CartItem> items, double total) async {
     final timestamp = DateTime.now();
 
