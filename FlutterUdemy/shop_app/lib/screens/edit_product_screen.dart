@@ -42,26 +42,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _form.currentState.save();
     setState(() => _isLoading = true);
 
-    if (widget.productId != null) {
-      // update a product
-      final before = products.findById(widget.productId);
-      products.updateProduct(
-        widget.productId,
-        Product(
-          title: _formTitle,
-          description: _formDescription,
-          imageUrl: _formImageUrl,
-          price: _formPrice,
-          id: before.id,
-          isFavorite: before.isFavorite,
-        ),
-      );
-
-      Navigator.of(context).pop();
-    } else {
-      print("Saving new product");
-      // save em product if new
-      try {
+    // catch errors when saving and updating
+    try {
+      // save/update ?
+      if (widget.productId != null) {
+        // update a product
+        final before = products.findById(widget.productId);
+        await products.updateProduct(
+          widget.productId,
+          Product(
+            title: _formTitle,
+            description: _formDescription,
+            imageUrl: _formImageUrl,
+            price: _formPrice,
+            id: before.id,
+            isFavorite: before.isFavorite,
+          ),
+        );
+      } else {
+        // save em product if new
+        print("Saving new product");
         await products.addProduct(Product(
           title: _formTitle,
           description: _formDescription,
@@ -69,23 +69,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
           price: _formPrice,
           id: null,
         ));
-        Navigator.of(context).pop();
-      } catch (e) {
-        print("Error saving product : $e");
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Error saving product!'),
-            content: Text(e.toString()),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            ],
-          ),
-        );
       }
+
+      // leave when done
+      Navigator.of(context).pop();
+    } catch (e) {
+      print("Error saving product : $e");
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('Error saving product!'),
+          content: Text(e.toString()),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        ),
+      );
     }
 
     setState(() => _isLoading = false);

@@ -17,8 +17,8 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Product.fromJson(Map<String, dynamic> j)
-      : id = j['id'],
+  Product.fromJson(String id, Map<String, dynamic> j)
+      : id = id,
         title = j['title'],
         description = j['description'],
         price = j['price'],
@@ -26,7 +26,6 @@ class Product with ChangeNotifier {
         isFavorite = j['isFavorite'];
 
   Map<String, dynamic> get json => {
-        'id': id,
         'title': title,
         'description': description,
         'price': price,

@@ -6,21 +6,17 @@ import 'package:http/http.dart' as http;
 import 'package:shop_app/util.dart';
 
 class Products with ChangeNotifier {
-  final dbUrl = '$FHOST/products.json';
-
   List<Product> _items = [];
 
   List<Product> get items => [..._items]; // copy
   List<Product> get favoriteItems => _items.where((x) => x.isFavorite).toList();
 
   Future<void> fetchAndSetProducts() async {
-    final resp = await http.get(dbUrl);
+    final resp = await http.get('$FHOST/products.json');
     final productsMap = jsonDecode(resp.body) as Map<String, dynamic>;
-    _items = productsMap.keys.map((id) {
-      final prod = productsMap[id];
-      prod['id'] = id;
-      return Product.fromJson(prod);
-    }).toList();
+    // map every entry to a product
+    _items = productsMap.entries.map((x) => Product.fromJson(x.key, x.value)).toList();
+    // notiff
     notifyListeners();
   }
 
@@ -28,7 +24,7 @@ class Products with ChangeNotifier {
     // post to server
     print('Posting new product to server');
     final resp = await http.post(
-      dbUrl,
+      '$FHOST/products.json',
       // note: id: null gets auto ignored
       body: jsonEncode(p.json),
     );
@@ -45,10 +41,20 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateProduct(String id, Product p) {
+  Future<void> updateProduct(String id, Product p) async {
     final i = _items.indexWhere((x) => x.id == id);
-    _items[i] = p;
-    notifyListeners();
+    if (i >= 0) {
+      // server
+      await http.patch(
+        '$FHOST/products/$id.json',
+        body: jsonEncode(p.json..remove('isFavorite')), // ignore isFavorite
+      );
+      // arr
+      _items[i] = p;
+      notifyListeners();
+    } else {
+      throw 'Item doesnt exist.';
+    }
   }
 
   void deleteProduct(String id) {
