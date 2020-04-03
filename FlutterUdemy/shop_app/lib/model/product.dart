@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:shop_app/util.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -33,8 +37,22 @@ class Product with ChangeNotifier {
         'isFavorite': isFavorite,
       };
 
-  void toggleFavorite() {
+  Future<void> toggleFavorite() async {
+    final snapshot = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
+
+    try {
+      // optimistic ui
+      final resp = await http.patch(
+        '$FHOST/products/$id.json',
+        body: jsonEncode({'isFavorite': isFavorite}),
+      );
+      if (resp.statusCode >= 400) throw ApiError("Error inside toggleFavorite(): status=${resp.statusCode}");
+    } catch (err) {
+      isFavorite = snapshot;
+      notifyListeners();
+      print(err);
+    }
   }
 }

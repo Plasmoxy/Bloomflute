@@ -5,13 +5,6 @@ import 'package:shop_app/model/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_app/util.dart';
 
-class ApiError implements Exception {
-  final String message;
-  ApiError(this.message);
-  @override
-  String toString() => message;
-}
-
 class Products with ChangeNotifier {
   List<Product> _items = [];
 
