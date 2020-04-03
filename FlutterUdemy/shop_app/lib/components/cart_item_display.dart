@@ -63,7 +63,7 @@ class CartItemDisplay extends StatelessWidget {
           padding: EdgeInsets.all(0),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(imageUrl),
+              backgroundImage: imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
             ),
             title: Text(title),
             subtitle: Text('Total: ${price * quantity} €'),
