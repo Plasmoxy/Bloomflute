@@ -57,6 +57,8 @@ class Auth with ChangeNotifier {
       'expiryDate': _expiryDate.toIso8601String(),
     });
     await prefs.setString('userData', userData);
+
+    print("Authenticated and saved token into userData!");
   }
 
   Future<bool> tryAutoLogin() async {
@@ -67,12 +69,12 @@ class Auth with ChangeNotifier {
       print("Autologin fail: prefs dont contain key userData");
       return false;
     }
-    final udata = jsonDecode(prefs.getString('userData'));
+    final udata = jsonDecode(prefs.getString('userData')) as Map<String, Object>;
 
     // validate token by expiry date
     final expiry = DateTime.parse(udata['expiryDate']);
-    if (expiry.isAfter(DateTime.now())) {
-      print("Autologin fail: expiry is after now");
+    if (expiry.isBefore(DateTime.now())) {
+      print("Autologin fail: token expired");
       return false;
     }
 
@@ -81,7 +83,7 @@ class Auth with ChangeNotifier {
     _expiryDate = expiry;
     notifyListeners();
 
-    print("Auto login done with udata: $udata");
+    print("Auto login worked!");
     _startAutoLogoutTimer();
     return true;
   }
