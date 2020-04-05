@@ -163,6 +163,9 @@ class _AuthCardState extends State<AuthCard> {
     }
 
     // end spin if the widget is still mounted
+    // NOTE: it may be not mounted because by loggin in above
+    // we modify the Auth store which triggers consumer in main
+    // and deattaches this widget
     if (mounted) setState(() => _isLoading = false);
   }
 
