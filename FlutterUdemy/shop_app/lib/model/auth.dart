@@ -54,4 +54,11 @@ class Auth with ChangeNotifier {
   Future<void> login(String mail, String password) {
     return _authenticate(mail, password, 'signInWithPassword');
   }
+
+  void logout() {
+    _token = null;
+    _userId = null;
+    _expiryDate = null;
+    notifyListeners();
+  }
 }
