@@ -9,7 +9,7 @@ import 'package:shop_app/model/theme_preference.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 
 class ProductsOverviewScreen extends StatefulWidget {
-  static const route = '/overview';
+  static const route = '/'; // initial route, loads products into mem
 
   @override
   _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();

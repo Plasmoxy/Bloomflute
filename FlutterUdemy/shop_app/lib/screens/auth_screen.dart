@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/model/auth.dart';
 import 'package:shop_app/util.dart';
@@ -9,7 +8,7 @@ import 'package:shop_app/util.dart';
 enum AuthMode { Signup, Login }
 
 class AuthScreen extends StatelessWidget {
-  static const route = '/auth';
+  static const route = 'auth'; // independent route
 
   @override
   Widget build(BuildContext context) {

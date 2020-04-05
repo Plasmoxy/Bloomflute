@@ -9,6 +9,17 @@ class Auth with ChangeNotifier {
   DateTime _expiryDate;
   String _userId;
 
+  bool get isAuthenticated {
+    return token != null;
+  }
+
+  String get token {
+    if (_expiryDate != null && _expiryDate.isAfter(DateTime.now())) {
+      return _token;
+    }
+    return null;
+  }
+
   Future<void> _authenticate(String email, String password, String urlSegment) async {
     final resp = await http.post(
       'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=$FAPIKEY',
@@ -20,10 +31,18 @@ class Auth with ChangeNotifier {
     );
     final data = jsonDecode(resp.body);
 
-    // errors
+    // error
     if (data['error'] != null) {
       throw ApiError(data['error']['message']);
     }
+
+    // success
+    _token = data['idToken'];
+    _userId = data['localId'];
+    _expiryDate = DateTime.now().add(Duration(
+      seconds: int.parse(data['expiresIn']),
+    ));
+    notifyListeners();
   }
 
   Future<void> signup(String mail, String password) {

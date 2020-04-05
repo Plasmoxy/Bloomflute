@@ -29,30 +29,36 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemePreference()),
         ChangeNotifierProvider(create: (_) => Auth()),
       ],
-      child: Consumer<ThemePreference>(
-        builder: (context, themePref, _) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Shop App',
-          theme: themePref.isDarkTheme ? darkTheme : lightTheme,
+      child: Consumer<Auth>(
+        builder: (context, auth, _) => Consumer<ThemePreference>(
+          builder: (context, themePref, _) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Shop App',
+            theme: themePref.isDarkTheme ? darkTheme : lightTheme,
 
-          // route generation
-          initialRoute: AuthScreen.route,
-          onGenerateRoute: (RouteSettings settings) {
-            print('Building route for ${settings.name}.');
-            final routes = <String, WidgetBuilder>{
-              '/': (ctx) => Container(),
-              AuthScreen.route: (ctx) => AuthScreen(),
-              ProductsOverviewScreen.route: (ctx) => ProductsOverviewScreen(),
-              ProductDetailScreen.route: (ctx) => ProductDetailScreen(),
-              CartScreen.route: (ctx) => CartScreen(),
-              OrdersScreen.route: (ctx) => OrdersScreen(),
-              UserProductsScreen.route: (ctx) => UserProductsScreen(),
-              EditProductScreen.route: (ctx) => EditProductScreen(settings.arguments as String),
-            };
-            WidgetBuilder builder = routes[settings.name];
-            // note: wrap builder call into another lambda in case of problems
-            return MaterialPageRoute(builder: builder, settings: settings);
-          },
+            // init route, safer this way than using initialRoute
+            // because initialRoute doesn't change conditionally
+            // relative to consumers
+            // really weird idk
+            home: auth.isAuthenticated ? ProductsOverviewScreen() : AuthScreen(),
+            initialRoute: '/',
+
+            // route generation for named Navigator pushes
+            onGenerateRoute: (RouteSettings settings) {
+              print('Building route: ${settings.name}.');
+              final routes = <String, WidgetBuilder>{
+                '/': (ctx) => ProductsOverviewScreen(),
+                ProductDetailScreen.route: (ctx) => ProductDetailScreen(),
+                CartScreen.route: (ctx) => CartScreen(),
+                OrdersScreen.route: (ctx) => OrdersScreen(),
+                UserProductsScreen.route: (ctx) => UserProductsScreen(),
+                EditProductScreen.route: (ctx) => EditProductScreen(settings.arguments as String),
+              };
+              WidgetBuilder builder = routes[settings.name];
+              // note: wrap builder call into another lambda in case of problems
+              return MaterialPageRoute(builder: builder, settings: settings);
+            },
+          ),
         ),
       ),
     );

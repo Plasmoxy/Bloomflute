@@ -6,7 +6,7 @@ import 'package:shop_app/model/orders.dart';
 import 'package:shop_app/model/products.dart';
 
 class CartScreen extends StatelessWidget {
-  static const route = "/cart-screen";
+  static const route = "/cart";
 
   @override
   Widget build(BuildContext context) {
