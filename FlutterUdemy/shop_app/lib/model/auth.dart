@@ -18,14 +18,19 @@ class Auth with ChangeNotifier {
         'returnSecureToken': true,
       }),
     );
-    print(jsonDecode(resp.body));
+    final data = jsonDecode(resp.body);
+
+    // errors
+    if (data['error'] != null) {
+      throw ApiError(data['error']['message']);
+    }
   }
 
   Future<void> signup(String mail, String password) {
-    return _authenticate(mail, password, 'signUpNewUser');
+    return _authenticate(mail, password, 'signUp');
   }
 
   Future<void> login(String mail, String password) {
-    return _authenticate(mail, password, 'verifyPassword');
+    return _authenticate(mail, password, 'signInWithPassword');
   }
 }

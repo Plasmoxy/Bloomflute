@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/model/auth.dart';
+import 'package:shop_app/util.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -101,6 +102,22 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void _showError(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _submit() async {
     final auth = Provider.of<Auth>(context, listen: false);
 
@@ -110,13 +127,37 @@ class _AuthCardState extends State<AuthCard> {
     }
     _formKey.currentState.save();
     setState(() => _isLoading = true);
-    if (_authMode == AuthMode.Login) {
-      // Log user in
-      await auth.login(_authData['email'], _authData['password']);
-    } else {
-      // Sign user up
-      await auth.signup(_authData['email'], _authData['password']);
+
+    // handle and try to request
+    try {
+      if (_authMode == AuthMode.Login) {
+        // Log user in
+        await auth.login(_authData['email'], _authData['password']);
+      } else {
+        // Sign user up
+        await auth.signup(_authData['email'], _authData['password']);
+      }
+    } on ApiError catch (e) {
+      var msg = 'Authentication failed';
+      if (e.toString().contains('EMAIL_EXISTS')) {
+        msg = 'This email is already in use!';
+      } else if (e.toString().contains('INVALID_EMAIL')) {
+        msg = 'This is not a valid email';
+      } else if (e.toString().contains('EMAIL_NOT_FOUND')) {
+        msg = 'No user with such email.';
+      } else if (e.toString().contains('INVALID_PASSWORD')) {
+        msg = 'Wrong password!';
+      } else {
+        print(e);
+      }
+      _showError(msg);
+    } catch (e) {
+      var msg = 'Error occured, try again later.';
+      print(e);
+      _showError(msg);
     }
+
+    // end spin
     setState(() => _isLoading = false);
   }
 
