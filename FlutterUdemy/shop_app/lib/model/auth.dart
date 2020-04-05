@@ -9,15 +9,23 @@ class Auth with ChangeNotifier {
   DateTime _expiryDate;
   String _userId;
 
-  Future<void> signup(String mail, String password) async {
+  Future<void> _authenticate(String email, String password, String urlSegment) async {
     final resp = await http.post(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$FAPIKEY',
+      'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=$FAPIKEY',
       body: jsonEncode({
-        'email': mail,
+        'email': email,
         'password': password,
         'returnSecureToken': true,
       }),
     );
     print(jsonDecode(resp.body));
+  }
+
+  Future<void> signup(String mail, String password) {
+    return _authenticate(mail, password, 'signUpNewUser');
+  }
+
+  Future<void> login(String mail, String password) {
+    return _authenticate(mail, password, 'verifyPassword');
   }
 }

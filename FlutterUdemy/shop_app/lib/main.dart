@@ -35,13 +35,14 @@ class App extends StatelessWidget {
           title: 'Shop App',
           theme: themePref.isDarkTheme ? darkTheme : lightTheme,
 
-          initialRoute: AuthScreen.route,
           // route generation
+          initialRoute: AuthScreen.route,
           onGenerateRoute: (RouteSettings settings) {
             print('Building route for ${settings.name}.');
             final routes = <String, WidgetBuilder>{
-              '/': (ctx) => ProductsOverviewScreen(),
+              '/': (ctx) => Container(),
               AuthScreen.route: (ctx) => AuthScreen(),
+              ProductsOverviewScreen.route: (ctx) => ProductsOverviewScreen(),
               ProductDetailScreen.route: (ctx) => ProductDetailScreen(),
               CartScreen.route: (ctx) => CartScreen(),
               OrdersScreen.route: (ctx) => OrdersScreen(),
