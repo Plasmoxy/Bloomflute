@@ -23,10 +23,12 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final resp = await http.get('$FHOST/products.json?auth=$authToken');
+    final resp = await http.get('$FHOST/products.json?auth=$authToken&orderBy="creatorId"&equalTo="$userId"'); // filter by creatorId
+    if (resp.statusCode >= 400) throw ApiError(resp.body);
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
 
     final respFav = await http.get('$FHOST/userFavorites/$userId.json?auth=$authToken');
+    if (respFav.statusCode >= 400) throw ApiError(respFav.body);
     final favorites = jsonDecode(respFav.body);
 
     // map every entry to a product
