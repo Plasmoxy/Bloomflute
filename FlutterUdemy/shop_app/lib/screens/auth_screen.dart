@@ -162,8 +162,8 @@ class _AuthCardState extends State<AuthCard> {
       _showError(msg);
     }
 
-    // end spin
-    setState(() => _isLoading = false);
+    // end spin if the widget is still mounted
+    if (mounted) setState(() => _isLoading = false);
   }
 
   void _switchAuthMode() {
