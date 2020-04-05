@@ -22,8 +22,10 @@ class Products with ChangeNotifier {
     return p;
   }
 
-  Future<void> fetchAndSetProducts() async {
-    final resp = await http.get('$FHOST/products.json?auth=$authToken&orderBy="creatorId"&equalTo="$userId"'); // filter by creatorId
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString = filterByUser ? '&orderBy="creatorId"&equalTo="$userId"' : '';
+
+    final resp = await http.get('$FHOST/products.json?auth=$authToken$filterString'); // filter by creatorId
     if (resp.statusCode >= 400) throw ApiError(resp.body);
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
 
