@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:shop_app/model/auth.dart';
 import 'package:shop_app/model/cart.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_app/util.dart';
@@ -21,11 +22,19 @@ class ShopOrder {
 
 class Orders with ChangeNotifier {
   List<ShopOrder> _orders = [];
+  String authToken;
+
+  Orders();
+
+  factory Orders.update(Orders o, Auth auth) {
+    o.authToken = auth.token;
+    return o;
+  }
 
   List<ShopOrder> get orders => [..._orders];
 
   Future<void> fetchAndSetOrders() async {
-    final resp = await http.get('$FHOST/orders.json');
+    final resp = await http.get('$FHOST/orders.json?auth=$authToken');
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
 
     _orders = data == null
@@ -55,7 +64,7 @@ class Orders with ChangeNotifier {
     final timestamp = DateTime.now();
 
     final resp = await http.post(
-      '$FHOST/orders.json',
+      '$FHOST/orders.json?auth=$authToken',
       body: jsonEncode({
         'total': total,
         'dateTime': timestamp.toIso8601String(),

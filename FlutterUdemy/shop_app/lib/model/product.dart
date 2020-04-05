@@ -37,7 +37,7 @@ class Product with ChangeNotifier {
         'isFavorite': isFavorite,
       };
 
-  Future<void> toggleFavorite() async {
+  Future<void> toggleFavorite(String token) async {
     final snapshot = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
@@ -45,7 +45,7 @@ class Product with ChangeNotifier {
     try {
       // optimistic ui
       final resp = await http.patch(
-        '$FHOST/products/$id.json',
+        '$FHOST/products/$id.json?auth=$token',
         body: jsonEncode({'isFavorite': isFavorite}),
       );
       if (resp.statusCode >= 400) throw ApiError("Error inside toggleFavorite(): status=${resp.statusCode}");

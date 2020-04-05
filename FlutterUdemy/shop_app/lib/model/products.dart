@@ -34,7 +34,7 @@ class Products with ChangeNotifier {
     // post to server
     print('Posting new product to server');
     final resp = await http.post(
-      '$FHOST/products.json',
+      '$FHOST/products.json?auth=$authToken',
       // note: id: null gets auto ignored
       body: jsonEncode(p.json),
     );
@@ -56,7 +56,7 @@ class Products with ChangeNotifier {
     if (i >= 0) {
       // server
       await http.patch(
-        '$FHOST/products/$id.json',
+        '$FHOST/products/$id.json?auth=$authToken',
         body: jsonEncode(p.json..remove('isFavorite')), // ignore isFavorite, but doesnt work anyway meh
       );
       // arr
@@ -68,7 +68,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final resp = await http.delete('$FHOST/products/$id.json');
+    final resp = await http.delete('$FHOST/products/$id.json?auth=$authToken');
     if (resp.statusCode >= 400) {
       throw ApiError("Couldn't delete product, status: ${resp.statusCode}");
     }
