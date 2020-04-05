@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_app/util.dart';
 
 class Auth with ChangeNotifier {
@@ -48,6 +49,41 @@ class Auth with ChangeNotifier {
     ));
     _startAutoLogoutTimer();
     notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    final userData = jsonEncode({
+      'token': _token,
+      'userId': _userId,
+      'expiryDate': _expiryDate.toIso8601String(),
+    });
+    await prefs.setString('userData', userData);
+  }
+
+  Future<bool> tryAutoLogin() async {
+    print("Trying auto login");
+    final prefs = await SharedPreferences.getInstance();
+    // if no userData
+    if (!prefs.containsKey('userData')) {
+      print("Autologin fail: prefs dont contain key userData");
+      return false;
+    }
+    final udata = jsonDecode(prefs.getString('userData'));
+
+    // validate token by expiry date
+    final expiry = DateTime.parse(udata['expiryDate']);
+    if (expiry.isAfter(DateTime.now())) {
+      print("Autologin fail: expiry is after now");
+      return false;
+    }
+
+    _token = udata['token'];
+    _userId = udata['userId'];
+    _expiryDate = expiry;
+    notifyListeners();
+
+    print("Auto login done with udata: $udata");
+    _startAutoLogoutTimer();
+    return true;
   }
 
   Future<void> signup(String mail, String password) {
@@ -58,7 +94,7 @@ class Auth with ChangeNotifier {
     return _authenticate(mail, password, 'signInWithPassword');
   }
 
-  void logout() {
+  Future<void> logout() async {
     _token = null;
     _userId = null;
     _expiryDate = null;
@@ -67,6 +103,8 @@ class Auth with ChangeNotifier {
       _logoutTimer = null;
     }
     notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 
   void _startAutoLogoutTimer() {

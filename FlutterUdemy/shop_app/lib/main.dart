@@ -12,6 +12,7 @@ import 'package:shop_app/screens/edit_product_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
 import 'package:shop_app/screens/products_overview_screen.dart';
+import 'package:shop_app/screens/splash_screen.dart';
 import 'package:shop_app/screens/user_products_screen.dart';
 
 void main() {
@@ -49,7 +50,12 @@ class App extends StatelessWidget {
             // relative to consumers
             // really weird idk
             // Max says home is always checked when changing routes
-            home: auth.isAuthenticated ? ProductsOverviewScreen() : AuthScreen(),
+            home: auth.isAuthenticated
+                ? ProductsOverviewScreen()
+                : FutureBuilder(
+                    future: auth.tryAutoLogin(),
+                    builder: (ctx, autoLoginSnapshot) => autoLoginSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : AuthScreen(),
+                  ),
 
             // route generation for named Navigator pushes
             onGenerateRoute: (RouteSettings settings) {
