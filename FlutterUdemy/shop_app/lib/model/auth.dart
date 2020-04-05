@@ -20,6 +20,8 @@ class Auth with ChangeNotifier {
     return null;
   }
 
+  String get userId => _userId;
+
   Future<void> _authenticate(String email, String password, String urlSegment) async {
     final resp = await http.post(
       'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=$FAPIKEY',

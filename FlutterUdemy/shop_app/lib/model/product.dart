@@ -21,33 +21,34 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Product.fromJson(String id, Map<String, dynamic> j)
+  Product.fromJson(String id, bool isFavorite, Map<String, dynamic> j)
       : id = id,
         title = j['title'],
         description = j['description'],
         price = j['price'],
         imageUrl = j['imageUrl'],
-        isFavorite = j['isFavorite'];
+        isFavorite = isFavorite;
 
   Map<String, dynamic> get json => {
         'title': title,
         'description': description,
         'price': price,
         'imageUrl': imageUrl,
-        'isFavorite': isFavorite,
       };
 
-  Future<void> toggleFavorite(String token) async {
+  Future<void> toggleFavorite(String token, String userId) async {
     final snapshot = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
 
     try {
       // optimistic ui
-      final resp = await http.patch(
-        '$FHOST/products/$id.json?auth=$token',
-        body: jsonEncode({'isFavorite': isFavorite}),
-      );
+      final resp = isFavorite
+          ? await http.put(
+              '$FHOST/userFavorites/$userId/$id.json?auth=$token',
+              body: jsonEncode(true),
+            )
+          : await http.delete('$FHOST/userFavorites/$userId/$id.json?auth=$token');
       if (resp.statusCode >= 400) throw ApiError("Error inside toggleFavorite(): status=${resp.statusCode}");
     } catch (err) {
       isFavorite = snapshot;

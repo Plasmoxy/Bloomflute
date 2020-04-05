@@ -9,6 +9,7 @@ import 'package:shop_app/util.dart';
 class Products with ChangeNotifier {
   List<Product> _items;
   String authToken;
+  String userId;
 
   List<Product> get items => [..._items]; // copy
   List<Product> get favoriteItems => _items.where((x) => x.isFavorite).toList();
@@ -17,6 +18,7 @@ class Products with ChangeNotifier {
 
   factory Products.update(Products p, Auth auth) {
     p.authToken = auth.token;
+    p.userId = auth.userId;
     return p;
   }
 
@@ -24,8 +26,19 @@ class Products with ChangeNotifier {
     final resp = await http.get('$FHOST/products.json?auth=$authToken');
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
 
+    final respFav = await http.get('$FHOST/userFavorites/$userId.json?auth=$authToken');
+    final favorites = jsonDecode(respFav.body);
+
     // map every entry to a product
-    _items = (data == null) ? [] : data.entries.map((x) => Product.fromJson(x.key, x.value)).toList();
+    _items = (data == null)
+        ? []
+        : data.entries
+            .map((x) => Product.fromJson(
+                  x.key,
+                  favorites == null ? false : favorites[x.key] ?? false,
+                  x.value,
+                ))
+            .toList();
     // notiff
     notifyListeners();
   }
