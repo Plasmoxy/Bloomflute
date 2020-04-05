@@ -1,18 +1,27 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:shop_app/model/auth.dart';
 import 'package:shop_app/model/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_app/util.dart';
 
 class Products with ChangeNotifier {
-  List<Product> _items = [];
+  List<Product> _items;
+  String authToken;
 
   List<Product> get items => [..._items]; // copy
   List<Product> get favoriteItems => _items.where((x) => x.isFavorite).toList();
 
+  Products();
+
+  factory Products.update(Products p, Auth auth) {
+    p.authToken = auth.token;
+    return p;
+  }
+
   Future<void> fetchAndSetProducts() async {
-    final resp = await http.get('$FHOST/products.json');
+    final resp = await http.get('$FHOST/products.json?auth=$authToken');
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
 
     // map every entry to a product
