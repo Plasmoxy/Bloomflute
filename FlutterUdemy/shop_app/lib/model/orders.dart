@@ -23,18 +23,20 @@ class ShopOrder {
 class Orders with ChangeNotifier {
   List<ShopOrder> _orders = [];
   String authToken;
+  String userId;
 
   Orders();
 
   factory Orders.update(Orders o, Auth auth) {
     o.authToken = auth.token;
+    o.userId = auth.userId;
     return o;
   }
 
   List<ShopOrder> get orders => [..._orders];
 
   Future<void> fetchAndSetOrders() async {
-    final resp = await http.get('$FHOST/orders.json?auth=$authToken');
+    final resp = await http.get('$FHOST/orders/$userId.json?auth=$authToken');
     final data = jsonDecode(resp.body) as Map<String, dynamic>;
 
     _orders = data == null
@@ -64,7 +66,7 @@ class Orders with ChangeNotifier {
     final timestamp = DateTime.now();
 
     final resp = await http.post(
-      '$FHOST/orders.json?auth=$authToken',
+      '$FHOST/orders/$userId.json?auth=$authToken',
       body: jsonEncode({
         'total': total,
         'dateTime': timestamp.toIso8601String(),

@@ -48,8 +48,8 @@ class App extends StatelessWidget {
             // because initialRoute doesn't change conditionally
             // relative to consumers
             // really weird idk
+            // Max says home is always checked when changing routes
             home: auth.isAuthenticated ? ProductsOverviewScreen() : AuthScreen(),
-            initialRoute: '/',
 
             // route generation for named Navigator pushes
             onGenerateRoute: (RouteSettings settings) {
