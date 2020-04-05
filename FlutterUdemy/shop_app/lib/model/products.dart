@@ -48,8 +48,8 @@ class Products with ChangeNotifier {
     print('Posting new product to server');
     final resp = await http.post(
       '$FHOST/products.json?auth=$authToken',
-      // note: id: null gets auto ignored
-      body: jsonEncode(p.json),
+      // note: id: null gets auto ignored and wont exist on the server
+      body: jsonEncode(p.json..['creatorId'] = userId),
     );
     final body = jsonDecode(resp.body);
 
@@ -70,7 +70,7 @@ class Products with ChangeNotifier {
       // server
       await http.patch(
         '$FHOST/products/$id.json?auth=$authToken',
-        body: jsonEncode(p.json..remove('isFavorite')), // ignore isFavorite, but doesnt work anyway meh
+        body: jsonEncode(p.json),
       );
       // arr
       _items[i] = p;
