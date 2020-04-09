@@ -18,23 +18,26 @@ class _OrderItemState extends State<OrderItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(10),
-      child: Column(children: <Widget>[
-        ListTile(
-          title: Text('${widget.order.total} €'),
-          subtitle: Text(
-            DateFormat('dd.MM.yyyy').format(widget.order.dateTime),
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 100),
+      height: _expanded ? min(widget.order.items.length * 40.0 + 150, 150) : 95,
+      child: Card(
+        margin: EdgeInsets.all(10),
+        child: Column(children: <Widget>[
+          ListTile(
+            title: Text('${widget.order.total} €'),
+            subtitle: Text(
+              DateFormat('dd.MM.yyyy').format(widget.order.dateTime),
+            ),
+            trailing: IconButton(
+              icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+              onPressed: () => setState(() => _expanded = !_expanded),
+            ),
           ),
-          trailing: IconButton(
-            icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
-            onPressed: () => setState(() => _expanded = !_expanded),
-          ),
-        ),
-        if (_expanded)
-          Container(
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            //height: min(widget.order.items.length * 20.0 + 10, 100),
+            height: _expanded ? widget.order.items.length * 30.0 + 20 : 0,
             child: Column(
               children: widget.order.items
                   .map((x) => Padding(
@@ -44,7 +47,10 @@ class _OrderItemState extends State<OrderItem> {
                           children: <Widget>[
                             Text(
                               x.title,
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Text('${x.quantity}x ${x.price} €'),
                           ],
@@ -53,7 +59,8 @@ class _OrderItemState extends State<OrderItem> {
                   .toList(),
             ),
           ),
-      ]),
+        ]),
+      ),
     );
   }
 }
