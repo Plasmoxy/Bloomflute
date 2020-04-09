@@ -12,6 +12,12 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleCtrl = TextEditingController();
 
   @override
+  void dispose() {
+    _titleCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
