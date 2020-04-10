@@ -10,7 +10,7 @@ class GreatPlaces with ChangeNotifier {
   List<Place> get items => [..._items];
 
   Future<void> fetchAndSetPlaces() async {
-    final dataList = await DB.getData('places');
+    final dataList = await DB.getData('user_places');
     _items = dataList
         .map((item) => Place(
               id: item['id'],
@@ -33,7 +33,7 @@ class GreatPlaces with ChangeNotifier {
     _items.add(place);
     notifyListeners();
 
-    DB.insert('places', {
+    DB.insert('user_places', {
       'id': place.id,
       'title': place.title,
       'image': place.image.path,

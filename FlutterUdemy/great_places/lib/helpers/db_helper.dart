@@ -15,7 +15,7 @@ class DB {
 
   static Future<void> insert(String table, Map<String, Object> data) async {
     final db = await DB.database();
-    await db.insert('places', data, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<List<Map<String, dynamic>>> getData(String table) async {
