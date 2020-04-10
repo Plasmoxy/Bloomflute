@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:great_places/components/image_input.dart';
+import 'package:great_places/components/location_input.dart';
 import 'package:great_places/model/great_places.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +59,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   ),
                   SizedBox(height: 10),
                   ImageInput(_selectImage),
+                  SizedBox(height: 10),
+                  LocationInput(),
                 ]),
               ),
             ),
