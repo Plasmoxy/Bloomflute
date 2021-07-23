@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_00/bloc_logger.dart';
+
 import 'package:bloc_00/counter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   print("App init");
-  Bloc.observer = BlocLogger();
   runApp(App());
 }
 
@@ -31,11 +33,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _counter = CounterBloc();
+  late final CounterBloc _counter;
 
   @override
   void initState() {
     super.initState();
+
+    Bloc.observer = BlocLogger(ctx: context);
+    _counter = CounterBloc(ctx: context);
   }
 
   @override
@@ -44,16 +49,25 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // change
             ElevatedButton(
-              onPressed: () => setState(() {
-                _counter.add(CounterSlowRise(to: 3));
-              }),
-              child: Text('set'),
+              child: Text('slowrise'),
+              onPressed: () => _counter.add(CounterSlowRise(to: 3)),
+            ),
+            ElevatedButton(
+              child: Text('error'),
+              onPressed: () => _counter.add(CounterErrorEvent()),
+            ),
+            Divider(thickness: 2),
+
+            // watch
+            BlocBuilder<CounterBloc, int>(
+              bloc: _counter,
+              builder: (ctx, state) => Text('counter: $state'),
             ),
           ],
         ),

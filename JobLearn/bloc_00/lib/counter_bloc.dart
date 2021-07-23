@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 abstract class CounterEvent {}
 
@@ -28,26 +30,40 @@ class CounterSlowRise extends CounterEvent {
 class CounterErrorEvent extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
-  CounterBloc() : super(0);
+  final BuildContext ctx;
+
+  CounterBloc({required this.ctx}) : super(0);
 
   @override
   Stream<int> mapEventToState(CounterEvent event) async* {
     if (event is CounterIncrement) yield state + 1;
     if (event is CounterDecrement) yield state - 1;
-    if (event is CounterSlowRise) yield* event.rise(); // nested generator call
-  }
-}
+    if (event is CounterSlowRise) yield* event.rise(); // custom nested generator call
 
-class BlocLogger extends BlocObserver {
-  @override
-  void onEvent(Bloc bloc, Object? event) {
-    super.onEvent(bloc, event);
-    print('${bloc.runtimeType} $event');
+    if (event is CounterErrorEvent) {
+      addError(Exception('Increment error!'));
+    }
   }
 
+  /* // triggers twice ?? 
   @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print('${bloc.runtimeType} ${transition.currentState} --[${transition.event.runtimeType})]-> ${transition.nextState}');
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    showDialog(
+      context: ctx,
+      builder: (_) => new CupertinoAlertDialog(
+        title: new Text("Cupertino Dialog"),
+        content: new Text("Hey! I'm Coflutter!"),
+        actions: <Widget>[
+          CupertinoButton(
+            child: Text('Close me!'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
   }
+  */
 }
