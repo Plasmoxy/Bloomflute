@@ -3,6 +3,8 @@ import 'package:bloc_00/counter_bloc.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  print("App init");
+  Bloc.observer = BlocLogger();
   runApp(App());
 }
 
@@ -29,6 +31,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _counter = CounterBloc();
+
   @override
   void initState() {
     super.initState();
@@ -46,9 +50,11 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             // change
             ElevatedButton(
-              onPressed: () => setState(() {}),
+              onPressed: () => setState(() {
+                _counter.add(CounterSlowRise(to: 3));
+              }),
               child: Text('set'),
-            )
+            ),
           ],
         ),
       ),
