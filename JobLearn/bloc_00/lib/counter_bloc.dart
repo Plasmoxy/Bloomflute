@@ -41,8 +41,14 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     if (event is CounterSlowRise) yield* event.rise(); // custom nested generator call
 
     if (event is CounterErrorEvent) {
-      addError(Exception('Increment error!'));
+      addError(Exception("YoshError"));
     }
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    print("YOSH");
+    super.onError(error, stackTrace);
   }
 
   /* // triggers twice ?? 

@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    Bloc.observer = BlocLogger(ctx: context);
+    // Bloc.observer = BlocLogger(ctx: context);
     _counter = CounterBloc(ctx: context);
   }
 
