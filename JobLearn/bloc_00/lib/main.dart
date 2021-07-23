@@ -18,7 +18,11 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(title: 'Yo'),
+      home: BlocProvider(
+        lazy: false,
+        create: (ctx) => CounterBloc(ctx: ctx),
+        child: HomePage(title: 'Yo'),
+      ),
     );
   }
 }
@@ -33,43 +37,41 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final CounterBloc _counter;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Bloc.observer = BlocLogger(ctx: context);
-    _counter = CounterBloc(ctx: context);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            // change
-            ElevatedButton(
-              child: Text('slowrise'),
-              onPressed: () => _counter.add(CounterSlowRise(to: 3)),
-            ),
-            ElevatedButton(
-              child: Text('error'),
-              onPressed: () => _counter.add(CounterErrorEvent()),
-            ),
-            Divider(thickness: 2),
+    // dependency injection
+    final _counter = BlocProvider.of<CounterBloc>(context);
 
-            // watch
-            BlocBuilder<CounterBloc, int>(
-              bloc: _counter,
-              builder: (ctx, state) => Text('counter: $state'),
-            ),
-          ],
+    return BlocListener<CounterBloc, int>(
+      listener: (ctx, state) {
+        print("Home page listened to state change to $state !");
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              // change
+              ElevatedButton(
+                child: Text('slowrise'),
+                onPressed: () => _counter.add(CounterSlowRise(to: 3)),
+              ),
+              ElevatedButton(
+                child: Text('error'),
+                onPressed: () => _counter.add(CounterErrorEvent()),
+              ),
+              Divider(thickness: 2),
+
+              // watch
+              BlocBuilder<CounterBloc, int>(
+                bloc: _counter,
+                builder: (ctx, state) => Text('counter: $state'),
+              ),
+            ],
+          ),
         ),
       ),
     );
