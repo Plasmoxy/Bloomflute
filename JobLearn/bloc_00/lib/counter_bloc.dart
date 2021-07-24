@@ -29,6 +29,8 @@ class CounterSlowRise extends CounterEvent {
   }
 }
 
+class Counter12 extends CounterEvent {}
+
 class CounterErrorEvent extends CounterEvent {}
 
 class CounterBloc extends Bloc<CounterEvent, int> {
@@ -44,6 +46,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
     if (event is CounterErrorEvent) {
       addError(Exception("YoshError"));
+    }
+
+    if (event is Counter12) {
+      yield 1;
+      await Future.delayed(Duration(seconds: 1));
+      yield 2;
     }
   }
 

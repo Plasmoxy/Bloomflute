@@ -4,6 +4,7 @@ import 'package:bloc_00/bloc_logger.dart';
 import 'package:bloc_00/counter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'lorem.dart';
 
 void main() {
   print("App init");
@@ -50,27 +51,38 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              // change
-              ElevatedButton(
-                child: Text('slowrise'),
-                onPressed: () => _counter.add(CounterSlowRise(to: 3)),
-              ),
-              ElevatedButton(
-                child: Text('error'),
-                onPressed: () => _counter.add(CounterErrorEvent()),
-              ),
-              Divider(thickness: 2),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                // change
+                ElevatedButton(
+                  child: Text('slowrise'),
+                  onPressed: () => _counter.add(CounterSlowRise(to: 3)),
+                ),
+                SizedBox(height: 5),
+                ElevatedButton(
+                  child: Text('error'),
+                  onPressed: () => _counter.add(CounterErrorEvent()),
+                ),
+                SizedBox(height: 5),
+                ElevatedButton(
+                  child: Text('counter 1 2'),
+                  onPressed: () => _counter.add(Counter12()),
+                ),
+                Divider(thickness: 2),
 
-              // watch
-              BlocBuilder<CounterBloc, int>(
-                bloc: _counter,
-                builder: (ctx, state) => Text('counter: $state'),
-              ),
-            ],
+                // watch
+                BlocBuilder<CounterBloc, int>(
+                  bloc: _counter,
+                  builder: (ctx, state) => Text('counter: $state'),
+                ),
+
+                Divider(thickness: 2),
+                Text(ipsum),
+              ],
+            ),
           ),
         ),
       ),
