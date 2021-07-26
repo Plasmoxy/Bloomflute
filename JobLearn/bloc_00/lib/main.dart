@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_00/bloc_logger.dart';
 
 import 'package:bloc_00/counter_bloc.dart';
+import 'package:bloc_00/store_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'lorem.dart';
@@ -19,10 +20,21 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider(
-        lazy: false,
-        create: (ctx) => CounterBloc(ctx: ctx),
-        child: HomePage(title: 'Yo'),
+      home: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              lazy: false,
+              create: (ctx) => CounterBloc(ctx: ctx),
+            ),
+            BlocProvider(
+              lazy: false,
+              create: (ctx) => StoreCubit(),
+            ),
+          ],
+          child: HomePage(title: 'Yo'),
+        ),
       ),
     );
   }
@@ -42,11 +54,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // dependency injection
     final _counter = BlocProvider.of<CounterBloc>(context);
+    final _store = BlocProvider.of<StoreCubit>(context);
 
-    return BlocListener<CounterBloc, int>(
-      listener: (ctx, state) {
-        print("Home page listened to state change to $state !");
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<CounterBloc, int>(
+          listener: (ctx, state) {
+            print("Home page listened to state change to $state !");
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
@@ -80,7 +97,23 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 Divider(thickness: 2),
-                Text(ipsum),
+                Text(ipsum, style: TextStyle(fontSize: 16)),
+
+                TextField(
+                  onChanged: (s) => _store.setUser(s),
+                ),
+                TextField(
+                  onChanged: (s) => _store.setPass(s),
+                ),
+                BlocBuilder<StoreCubit, StoreState>(
+                  bloc: _store,
+                  builder: (ctx, s) => Column(
+                    children: [
+                      Text('store.user: ${s.user}'),
+                      Text('store.pass: ${s.pass}'),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
