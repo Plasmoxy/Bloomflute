@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image/image.dart' as IMG;
+import 'package:permission_handler/permission_handler.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); //Ensure plugin services are initialized
@@ -34,6 +35,18 @@ class App extends StatelessWidget {
   }
 }
 
+class MyCustomClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    final hh = size.width / 3 * 4;
+
+    return Rect.fromLTWH(0, 0, size.width, hh);
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) => false;
+}
+
 class MainPage extends StatefulWidget {
   final List<CameraDescription> cameras;
   final ValueNotifier<double> aspectV;
@@ -58,6 +71,8 @@ class _MainPageState extends State<MainPage> {
     super.initState();
 
     Future.delayed(Duration.zero, () async {
+      if (!await Permission.manageExternalStorage.request().isGranted) {}
+
       _ctrl = CameraController(
         widget.cameras[selectedCam],
         ResolutionPreset.ultraHigh,
@@ -83,16 +98,13 @@ class _MainPageState extends State<MainPage> {
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.rotationX(pi),
-                          child: ValueListenableBuilder<double>(
-                            valueListenable: widget.aspectV,
-                            builder: (ctx, asp, w) => AspectRatio(
-                              aspectRatio: asp,
-                              child: CameraPreview(
-                                _ctrl!,
-                              ),
+                        ClipRect(
+                          clipper: MyCustomClipper(),
+                          child: Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.rotationX(pi),
+                            child: CameraPreview(
+                              _ctrl!,
                             ),
                           ),
                         ),
@@ -100,7 +112,7 @@ class _MainPageState extends State<MainPage> {
                     ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,26 +146,38 @@ class _MainPageState extends State<MainPage> {
 
                       IMG.Image image = IMG.decodeJpg(await file.readAsBytes());
                       IMG.Image flipped = IMG.flipHorizontal(image);
-                      await file.writeAsBytes(IMG.encodeJpg(flipped));
+                      IMG.Image cropped = IMG.copyCrop(flipped, 0, 0, flipped.width, (flipped.width / 3 * 4).toInt());
 
+                      await file.writeAsBytes(IMG.encodeJpg(cropped));
                       final result = await ImageGallerySaver.saveFile(file.path);
+
+                      await file.writeAsBytes(IMG.encodeJpg(flipped));
+                      File neww = await file.copy(file.path + '.cropped.jpg');
+                      final resultOrigo = await ImageGallerySaver.saveFile(neww.path);
+
                       setState(() {
                         capturedImages.add(File(file.path));
                       });
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('${result}'),
+                          padding: EdgeInsets.only(bottom: 30),
+                          duration: Duration(seconds: 1),
                         ),
                       );
                       print(result);
+                      print(resultOrigo);
                     },
                   ),
                   IconButton(
                     icon: Icon(
-                      Icons.photo_album,
+                      Icons.remove_red_eye,
                       size: 50,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      _ctrl!.setFocusPoint(const Offset(0.375, 0.5));
+                    },
                   ),
                 ],
               ),
